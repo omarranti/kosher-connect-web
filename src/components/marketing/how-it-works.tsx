@@ -37,7 +37,7 @@ export function HowItWorks() {
                 {s.num}
               </div>
               <h3 className="font-display text-base font-semibold text-brand-parchment sm:text-lg">{s.title}</h3>
-              <p className="mx-auto mt-2 max-w-[240px] font-accent text-sm leading-relaxed text-white/40">
+              <p className="mx-auto mt-2 max-w-[240px] font-accent text-sm leading-relaxed text-white/60">
                 {s.description}
               </p>
             </div>
