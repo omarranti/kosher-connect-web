@@ -24,5 +24,5 @@ export async function signInAction(formData: FormData) {
     // Any auth error (CredentialsSignin, etc.)
     return { error: "Invalid email or password." };
   }
-  redirect(callbackUrl);
+  redirect(callbackUrl as "/admin");
 }
