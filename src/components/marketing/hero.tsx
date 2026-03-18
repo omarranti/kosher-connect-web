@@ -1,18 +1,29 @@
 export function HeroSection() {
   return (
     <section className="relative min-h-screen overflow-hidden bg-brand-cream py-24 sm:py-32 md:py-0">
-      {/* Background orbs */}
+      {/* Background orbs — layered depth */}
       <div className="pointer-events-none absolute inset-0">
-        <div className="absolute -right-24 -top-48 h-[500px] w-[500px] rounded-full bg-brand-gold-pale/60 blur-[100px] animate-soft-breathe" />
-        <div className="absolute -left-32 bottom-0 h-[350px] w-[350px] rounded-full bg-brand-burgundy/5 blur-[100px] animate-soft-breathe" style={{ animationDelay: '2s' }} />
-        <div className="absolute left-1/3 top-1/3 h-[250px] w-[250px] rounded-full bg-brand-gold/10 blur-[80px] animate-soft-breathe" style={{ animationDelay: '4s' }} />
+        <div className="absolute -right-24 -top-48 h-[600px] w-[600px] rounded-full bg-brand-gold-pale/50 blur-[120px] animate-soft-breathe" />
+        <div className="absolute -left-32 bottom-0 h-[400px] w-[400px] rounded-full bg-brand-burgundy/5 blur-[120px] animate-soft-breathe" style={{ animationDelay: '2s' }} />
+        <div className="absolute left-1/3 top-1/3 h-[300px] w-[300px] rounded-full bg-brand-gold/8 blur-[100px] animate-soft-breathe" style={{ animationDelay: '4s' }} />
+        {/* Additional subtle depth layer */}
+        <div className="absolute right-1/4 bottom-1/4 h-[200px] w-[200px] rounded-full bg-brand-navy/[0.02] blur-[80px]" />
       </div>
 
-      <div className="relative mx-auto grid min-w-0 max-w-7xl items-center gap-12 px-6 md:min-h-screen md:grid-cols-2 md:gap-10 md:px-10">
+      {/* Subtle grid pattern overlay */}
+      <div
+        className="pointer-events-none absolute inset-0 opacity-[0.015]"
+        style={{
+          backgroundImage: 'radial-gradient(circle at 1px 1px, currentColor 1px, transparent 0)',
+          backgroundSize: '40px 40px',
+        }}
+      />
+
+      <div className="relative mx-auto grid min-w-0 max-w-7xl items-center gap-12 px-6 md:min-h-screen md:grid-cols-2 md:gap-16 md:px-10">
         {/* Left — Copy */}
         <div className="order-2 text-center md:order-1 md:text-left">
           {/* Confetti accent */}
-          <div className="mb-5 flex justify-center gap-2 md:justify-start">
+          <div className="mb-6 flex justify-center gap-2 md:justify-start">
             {[...Array(8)].map((_, i) => (
               <span
                 key={i}
@@ -23,22 +34,25 @@ export function HeroSection() {
           </div>
 
           {/* Badge */}
-          <div className="mb-6 inline-flex items-center gap-2 rounded-pill border border-brand-sand bg-white/90 px-4 py-1.5 shadow-card">
-            <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-brand-burgundy" />
+          <div className="mb-7 inline-flex items-center gap-2.5 rounded-pill border border-brand-sand bg-white/80 px-5 py-2 shadow-card backdrop-blur-sm">
+            <span className="relative flex h-2 w-2">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-brand-burgundy/60" />
+              <span className="relative inline-flex h-2 w-2 rounded-full bg-brand-burgundy" />
+            </span>
             <span className="font-ui text-xs font-medium text-brand-navy/70">Coming soon to iOS</span>
           </div>
 
           <h1 className="font-display text-4xl font-bold leading-[1.06] tracking-tight sm:text-5xl md:text-6xl lg:text-7xl">
             <span className="text-brand-gold">What&apos;s up,</span>
             <br />
-            <em className="text-brand-burgundy">friends?</em>
+            <em className="bg-gradient-to-r from-brand-burgundy to-brand-burgundy-light bg-clip-text text-transparent">friends?</em>
           </h1>
 
-          <p className="mx-auto mt-5 max-w-md font-accent text-base leading-relaxed text-brand-navy/50 sm:text-lg md:mx-0">
+          <p className="mx-auto mt-6 max-w-md font-accent text-base leading-relaxed text-brand-navy/50 sm:text-lg md:mx-0">
             Here&apos;s what&apos;s popping in your neighborhood. Kosher spots, events, daily nudges, and your people — one tap away.
           </p>
 
-          <div className="mt-8 flex flex-wrap justify-center gap-3 md:justify-start">
+          <div className="mt-9 flex flex-wrap justify-center gap-3 md:justify-start">
             <a href="#waitlist" className="btn-gold inline-flex items-center gap-2">
               Try 7 Days Free
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M12 5l7 7-7 7" /></svg>
@@ -49,12 +63,21 @@ export function HeroSection() {
           </div>
 
           {/* Social proof */}
-          <div className="mt-8 flex items-center justify-center gap-3 md:justify-start">
-            <div className="flex -space-x-1.5">
-              <span className="grid h-8 w-8 place-items-center rounded-full border-2 border-brand-cream bg-brand-navy font-ui text-[11px] font-bold text-brand-gold-pale">R</span>
-              <span className="grid h-8 w-8 place-items-center rounded-full border-2 border-brand-cream bg-brand-burgundy/10 font-ui text-[11px] font-bold text-brand-burgundy">D</span>
-              <span className="grid h-8 w-8 place-items-center rounded-full border-2 border-brand-cream bg-brand-gold-pale font-ui text-[11px] font-bold text-brand-gold">M</span>
-              <span className="grid h-8 w-8 place-items-center rounded-full border-2 border-brand-cream bg-brand-gold font-ui text-[9px] font-bold text-white">+6</span>
+          <div className="mt-9 flex items-center justify-center gap-3 md:justify-start">
+            <div className="flex -space-x-2">
+              {[
+                { letter: 'R', bg: 'bg-brand-navy', text: 'text-brand-gold-pale' },
+                { letter: 'D', bg: 'bg-brand-burgundy/10', text: 'text-brand-burgundy' },
+                { letter: 'M', bg: 'bg-brand-gold-pale', text: 'text-brand-gold' },
+                { letter: '+6', bg: 'bg-brand-gold', text: 'text-white' },
+              ].map((a) => (
+                <span
+                  key={a.letter}
+                  className={`grid h-9 w-9 place-items-center rounded-full border-[2.5px] border-brand-cream ${a.bg} font-ui text-[11px] font-bold ${a.text} shadow-sm`}
+                >
+                  {a.letter}
+                </span>
+              ))}
             </div>
             <p className="font-ui text-sm text-brand-navy/50">
               <b className="text-brand-navy">200+</b> already on the waitlist
@@ -64,10 +87,19 @@ export function HeroSection() {
 
         {/* Right — Phone mockup */}
         <div className="order-1 flex justify-center md:order-2">
-          <div className="animate-gentle-float">
+          <div className="relative animate-gentle-float">
+            {/* Glow behind phone */}
+            <div className="absolute -inset-8 rounded-[48px] bg-gradient-to-b from-brand-gold/15 via-brand-gold-pale/10 to-transparent blur-2xl" />
             <PhoneMockup />
           </div>
         </div>
+      </div>
+
+      {/* Bottom wave divider */}
+      <div className="absolute -bottom-px left-0 right-0">
+        <svg viewBox="0 0 1440 60" fill="none" preserveAspectRatio="none" className="block h-[40px] w-full sm:h-[60px]">
+          <path d="M0 60V30C240 5 480 0 720 15C960 30 1200 45 1440 30V60H0Z" fill="#FDF6EC" />
+        </svg>
       </div>
     </section>
   );
@@ -75,15 +107,18 @@ export function HeroSection() {
 
 function PhoneMockup() {
   return (
-    <div className="w-[240px] overflow-hidden rounded-[36px] border-[3px] border-brand-sand bg-white shadow-card-hover sm:w-[280px]">
+    <div className="relative w-[260px] overflow-hidden rounded-[40px] border-[3px] border-brand-sand/80 bg-white shadow-card-hover sm:w-[300px]">
+      {/* Notch */}
+      <div className="absolute left-1/2 top-0 z-10 h-6 w-24 -translate-x-1/2 rounded-b-2xl bg-brand-navy/5" />
+
       {/* Header */}
-      <div className="bg-gradient-to-b from-brand-cream to-brand-parchment px-5 pb-4 pt-10 text-center">
+      <div className="bg-gradient-to-b from-brand-cream to-brand-parchment px-5 pb-5 pt-12 text-center">
         <h3 className="font-display text-lg font-bold text-brand-gold">What&apos;s up, friends?</h3>
-        <p className="font-ui text-[10px] font-semibold text-brand-navy">Here&apos;s what&apos;s popping in your neighborhood.</p>
+        <p className="mt-0.5 font-ui text-[10px] font-semibold text-brand-navy/60">Here&apos;s what&apos;s popping in your neighborhood.</p>
       </div>
 
       {/* Body */}
-      <div className="bg-brand-cream/50 px-4 py-3">
+      <div className="bg-brand-cream/40 px-4 py-3">
         {/* Mood pills */}
         <div className="mb-3 grid grid-cols-2 gap-1.5">
           {[
@@ -94,9 +129,9 @@ function PhoneMockup() {
           ].map((m) => (
             <div
               key={m.label}
-              className={`flex items-center gap-1 rounded-xl border px-2.5 py-2 font-ui text-[10px] font-semibold ${
+              className={`flex items-center gap-1 rounded-xl border px-2.5 py-2 font-ui text-[10px] font-semibold transition-colors ${
                 m.on
-                  ? 'border-brand-gold bg-brand-gold text-white'
+                  ? 'border-brand-gold bg-brand-gold text-white shadow-sm'
                   : 'border-brand-sand bg-white text-brand-navy'
               }`}
             >
@@ -111,12 +146,12 @@ function PhoneMockup() {
 
         {/* Event cards */}
         {[
-          { icon: 'M12 2c.5 0 1 .2 1.4.5l3.6 3a1 1 0 0 1 .4.8v4.4a1 1 0 0 1-.4.8l-3.6 3a2 2 0 0 1-2.8 0l-3.6-3A1 1 0 0 1 6.6 10.7V6.3a1 1 0 0 1 .4-.8l3.6-3c.4-.3.9-.5 1.4-.5z', title: "Shabbat Dinner Rachel's", meta: 'Friday · 7:30 PM · 0.8 mi' },
-          { icon: 'M12 2a4 4 0 0 0-4 4v2H6a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2h-2V6a4 4 0 0 0-4-4z', title: 'Challah Bake Workshop', meta: 'Sunday · 2:00 PM · 1.2 mi' },
+          { icon: 'M12 2c.5 0 1 .2 1.4.5l3.6 3a1 1 0 0 1 .4.8v4.4a1 1 0 0 1-.4.8l-3.6 3a2 2 0 0 1-2.8 0l-3.6-3A1 1 0 0 1 6.6 10.7V6.3a1 1 0 0 1 .4-.8l3.6-3c.4-.3.9-.5 1.4-.5z', title: "Shabbat Dinner Rachel's", meta: 'Friday · 7:30 PM · 0.8 mi', color: 'bg-brand-burgundy/10 text-brand-burgundy' },
+          { icon: 'M12 2a4 4 0 0 0-4 4v2H6a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2h-2V6a4 4 0 0 0-4-4z', title: 'Challah Bake Workshop', meta: 'Sunday · 2:00 PM · 1.2 mi', color: 'bg-brand-gold-pale text-brand-gold' },
         ].map((e) => (
-          <div key={e.title} className="mb-2 flex gap-2 rounded-xl border border-brand-sand bg-white p-2">
-            <div className="grid h-10 w-10 flex-shrink-0 place-items-center rounded-lg bg-brand-parchment">
-              <svg className="h-4 w-4 text-brand-burgundy" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d={e.icon} /></svg>
+          <div key={e.title} className="mb-2 flex gap-2.5 rounded-xl border border-brand-sand/80 bg-white p-2.5 shadow-sm">
+            <div className={`grid h-10 w-10 flex-shrink-0 place-items-center rounded-lg ${e.color}`}>
+              <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d={e.icon} /></svg>
             </div>
             <div>
               <p className="font-ui text-[10px] font-bold text-brand-navy">{e.title}</p>
@@ -126,7 +161,7 @@ function PhoneMockup() {
         ))}
 
         <p className="mb-1.5 mt-3 font-ui text-[10px] font-bold text-brand-navy">Today&apos;s Torah Insight</p>
-        <div className="rounded-lg border border-brand-sand bg-brand-parchment p-2">
+        <div className="rounded-xl border border-brand-gold-pale bg-gradient-to-br from-brand-parchment to-brand-cream-deep p-2.5">
           <p className="font-accent text-[9px] italic leading-snug text-brand-navy/60">
             Even an ordinary meal can become holy when it gathers people with intention.
           </p>
@@ -134,7 +169,7 @@ function PhoneMockup() {
       </div>
 
       {/* Tab bar */}
-      <div className="flex items-end border-t border-brand-sand/50 bg-white/95 px-1 pb-2 pt-1.5">
+      <div className="flex items-end border-t border-brand-sand/40 bg-white px-1 pb-2.5 pt-2">
         {[
           { label: 'Home', active: true, icon: 'M3 12l9-9 9 9v9a1 1 0 01-1 1h-5v-6H9v6H4a1 1 0 01-1-1z' },
           { label: 'Hotspots', active: false, icon: 'M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z' },
@@ -146,7 +181,7 @@ function PhoneMockup() {
         ))}
         {/* Center tab */}
         <div className="-mt-3 flex flex-1 flex-col items-center">
-          <div className="grid h-10 w-10 place-items-center rounded-full bg-brand-gold font-ui text-[6px] font-bold text-brand-navy shadow-gold">
+          <div className="grid h-10 w-10 place-items-center rounded-full bg-gradient-to-b from-brand-gold to-brand-gold-light font-ui text-[6px] font-bold text-brand-navy shadow-gold">
             <svg className="h-3 w-3" viewBox="0 0 24 24" fill="currentColor"><path d="M19 3H5a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2V5a2 2 0 00-2-2z" /></svg>
             Daily
           </div>
@@ -160,6 +195,11 @@ function PhoneMockup() {
             {t.label}
           </div>
         ))}
+      </div>
+
+      {/* Home indicator */}
+      <div className="flex justify-center bg-white pb-2 pt-1">
+        <div className="h-1 w-24 rounded-full bg-brand-navy/10" />
       </div>
     </div>
   );

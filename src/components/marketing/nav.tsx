@@ -21,16 +21,16 @@ export function MarketingNav() {
 
   return (
     <header
-      className={`fixed left-0 right-0 top-0 z-50 transition-all duration-300 ${
+      className={`fixed left-0 right-0 top-0 z-50 transition-all duration-500 ${
         scrolled
-          ? "border-b border-brand-sand/60 bg-brand-cream/80 shadow-card backdrop-blur-xl"
+          ? "border-b border-brand-sand/40 bg-brand-cream/70 shadow-card backdrop-blur-2xl"
           : "bg-transparent"
       }`}
     >
-      <div className="mx-auto flex min-w-0 max-w-7xl items-center justify-between px-5 py-3.5 sm:px-8">
+      <div className="mx-auto flex min-w-0 max-w-7xl items-center justify-between px-5 py-4 sm:px-8">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2.5">
-          <div className="grid h-9 w-9 place-items-center rounded-[11px] bg-brand-navy">
+          <div className="grid h-9 w-9 place-items-center rounded-[11px] bg-brand-navy shadow-sm">
             <svg className="h-5 w-5 fill-brand-gold-pale" viewBox="0 0 24 24">
               <path d="M12 2L9 9H2l5.5 4.5L5 21l7-5 7 5-2.5-7.5L22 9h-7z" />
             </svg>
@@ -41,12 +41,12 @@ export function MarketingNav() {
         </Link>
 
         {/* Desktop */}
-        <div className="hidden items-center gap-5 md:flex">
+        <div className="hidden items-center gap-6 md:flex">
           {navLinks.map((link) => (
             <a
               key={link.href}
               href={link.href}
-              className="font-ui text-sm font-medium text-brand-navy/50 transition-colors hover:text-brand-navy"
+              className="font-ui text-sm font-medium text-brand-navy/50 transition-colors duration-200 hover:text-brand-navy"
             >
               {link.label}
             </a>
@@ -59,23 +59,23 @@ export function MarketingNav() {
         {/* Mobile toggle */}
         <button
           onClick={() => setMobileOpen(!mobileOpen)}
-          className="md:hidden"
+          className="grid h-10 w-10 place-items-center rounded-brand-sm transition-colors hover:bg-brand-sand/30 md:hidden"
           aria-label="Toggle menu"
         >
-          {mobileOpen ? <X size={24} /> : <Menu size={24} />}
+          {mobileOpen ? <X size={22} /> : <Menu size={22} />}
         </button>
       </div>
 
       {/* Mobile menu */}
       {mobileOpen && (
-        <div className="border-t border-brand-sand/50 bg-brand-cream px-6 py-6 md:hidden">
+        <div className="border-t border-brand-sand/30 bg-brand-cream/95 px-6 py-6 backdrop-blur-xl md:hidden">
           <nav className="flex flex-col gap-4">
             {navLinks.map((link) => (
               <a
                 key={link.href}
                 href={link.href}
                 onClick={() => setMobileOpen(false)}
-                className="font-ui text-base font-medium text-brand-navy"
+                className="font-ui text-base font-medium text-brand-navy transition-colors hover:text-brand-burgundy"
               >
                 {link.label}
               </a>
