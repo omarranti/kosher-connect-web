@@ -132,7 +132,7 @@ npx vercel
 # Or connect GitHub repo to Vercel for auto-deploy
 ```
 
-Set environment variables in Vercel dashboard. Database can be Neon, Supabase, or Railway PostgreSQL.
+Set environment variables in Vercel dashboard. **Required for admin:** `DATABASE_URL` (Postgres). See **[docs/DATABASE_VERCEL.md](docs/DATABASE_VERCEL.md)** for Neon + `prisma db push` + seed steps.
 
 ### “Failed to fetch one or more git submodules” (Vercel)
 

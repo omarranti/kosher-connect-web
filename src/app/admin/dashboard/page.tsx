@@ -82,11 +82,34 @@ export default async function DashboardPage() {
           role="alert"
         >
           <p className="font-display text-lg font-semibold text-semantic-red">Database unavailable</p>
-          <p className="mt-2 font-ui text-sm text-gray-700">{dbError}</p>
-          <p className="mt-4 font-ui text-xs text-gray-500">
-            Set <code className="rounded bg-white px-1">DATABASE_URL</code> (and{" "}
-            <code className="rounded bg-white px-1">DIRECT_URL</code> if using Prisma) in your
-            hosting environment, then redeploy.
+          <p className="mt-2 font-ui text-sm text-gray-700 break-words">{dbError}</p>
+          <ol className="mt-4 list-decimal space-y-2 pl-5 font-ui text-sm text-gray-700">
+            <li>
+              Vercel → Project → <strong>Settings → Environment Variables</strong> → add{" "}
+              <code className="rounded bg-white px-1 text-xs">DATABASE_URL</code> (Postgres URL from{" "}
+              <a
+                href="https://neon.tech"
+                className="text-brand-navy underline"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Neon
+              </a>{" "}
+              or Supabase). <strong>Redeploy</strong> after saving.
+            </li>
+            <li>
+              On your computer, create tables:{" "}
+              <code className="block mt-1 rounded bg-white p-2 text-xs">
+                DATABASE_URL=&quot;…same url…&quot; npx prisma db push
+              </code>
+            </li>
+            <li>
+              Optional seed data:{" "}
+              <code className="rounded bg-white px-1 text-xs">npx prisma db seed</code>
+            </li>
+          </ol>
+          <p className="mt-3 font-ui text-xs text-gray-500">
+            Full guide in the repo: <code className="rounded bg-white px-1">docs/DATABASE_VERCEL.md</code>
           </p>
         </div>
       ) : null}
