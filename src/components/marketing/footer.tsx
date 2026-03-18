@@ -5,7 +5,7 @@ const footerLinks = {
   product: [
     { label: "Features", href: "/#features" as const },
     { label: "Pricing", href: "/#pricing" as const },
-    { label: "Add Your Business", href: "/add-business" as const },
+    { label: "Work With Us", href: "/work-with-us" as const },
     { label: "Join Waitlist", href: "/#waitlist" as const },
   ],
   company: [

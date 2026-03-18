@@ -8,7 +8,7 @@ import { AdminEntryButton } from "@/components/marketing/admin-entry-button";
 const navLinks = [
   { label: "Features", href: "#features" },
   { label: "Pricing", href: "#pricing" },
-  { label: "Add Your Business", href: "/add-business" },
+  { label: "Work With Us", href: "/work-with-us" },
 ];
 
 export function MarketingNav() {
