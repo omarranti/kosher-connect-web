@@ -1,11 +1,54 @@
-export default async function EventDetailPage({ params }: { params: Promise<{ id: string }> }) {
+import { notFound } from "next/navigation";
+import Link from "next/link";
+import { prisma } from "@/lib/db";
+import { EventForm } from "../event-form";
+
+export const dynamic = "force-dynamic";
+
+export default async function EditEventPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
   const { id } = await params;
+
+  const event = await prisma.event.findUnique({
+    where: { id },
+    select: {
+      id: true,
+      title: true,
+      status: true,
+      description: true,
+      startDate: true,
+      endDate: true,
+      city: true,
+      state: true,
+      address: true,
+      locationName: true,
+      isVirtual: true,
+      virtualUrl: true,
+      isFree: true,
+      price: true,
+      maxAttendees: true,
+      registrationUrl: true,
+      isRecurring: true,
+    },
+  });
+
+  if (!event) notFound();
+
   return (
     <div className="space-y-6">
-      <h1 className="font-display text-2xl font-bold text-brand-navy">Edit Event #{id}</h1>
-      <div className="rounded-brand border border-gray-100 bg-white p-6">
-        <p className="font-accent text-sm italic text-gray-400">Form implementation pending.</p>
+      <div>
+        <Link href="/admin/events" className="font-ui text-xs text-brand-gold hover:text-brand-navy transition-colors">
+          &larr; Back to Events
+        </Link>
+        <h1 className="mt-2 font-display text-2xl font-bold text-brand-navy">
+          Edit Event
+        </h1>
+        <p className="font-accent text-sm italic text-gray-500">{event.title}</p>
       </div>
+      <EventForm event={event} />
     </div>
   );
 }
