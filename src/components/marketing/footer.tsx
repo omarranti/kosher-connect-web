@@ -37,13 +37,16 @@ export function MarketingFooter() {
                 Kosher Connect
               </span>
             </div>
-            <p className="mt-4 max-w-[240px] font-accent text-sm leading-relaxed text-white/40">
+            <p className="mt-4 max-w-[240px] font-accent text-sm leading-relaxed text-white/35">
               Your Jewish community hub. From Shabbat to simchas — find your people, one tap away.
             </p>
             {/* Launch cities */}
-            <p className="mt-3 font-ui text-xs text-brand-gold/50">
-              Launching first in LA, NYC &amp; Miami
-            </p>
+            <div className="mt-4 flex items-center gap-2">
+              <span className="h-1 w-1 rounded-full bg-brand-gold/40" />
+              <p className="font-ui text-xs text-brand-gold/50">
+                Launching in LA, NYC &amp; Miami
+              </p>
+            </div>
             {/* Email */}
             <a
               href="mailto:hello@kosherconnect.com"

@@ -19,23 +19,27 @@ export function EmailSignup() {
   }
 
   return (
-    <section className="relative border-y border-brand-sand/50 bg-brand-parchment py-14 sm:py-16">
+    <section className="relative border-y border-brand-sand/40 bg-brand-parchment py-16 sm:py-20">
+      {/* Decorative gradient lines */}
+      <div className="pointer-events-none absolute left-0 right-0 top-0 h-px bg-gradient-to-r from-transparent via-brand-gold/20 to-transparent" />
+      <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-brand-gold/20 to-transparent" />
+
       <div className="mx-auto max-w-2xl px-6 text-center">
         {!submitted ? (
           <>
             <p className="font-ui text-xs font-light uppercase tracking-[0.2em] text-brand-gold">
               Be the First to Know
             </p>
-            <h3 className="mt-2 font-display text-xl font-bold text-brand-navy sm:text-2xl">
+            <h3 className="mt-3 font-display text-2xl font-bold text-brand-navy sm:text-3xl">
               Get notified when we launch
             </h3>
-            <p className="mt-2 font-accent text-sm leading-relaxed text-brand-navy/40">
+            <p className="mt-3 font-accent text-sm leading-relaxed text-brand-navy/40 sm:text-base">
               Drop your email and we&apos;ll let you know the moment Kosher Connect is live.
             </p>
 
             <form
               onSubmit={handleSubmit}
-              className="mx-auto mt-6 flex max-w-md flex-col gap-3 sm:flex-row"
+              className="mx-auto mt-8 flex max-w-md flex-col gap-3 sm:flex-row"
             >
               <input
                 type="email"
@@ -43,18 +47,19 @@ export function EmailSignup() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="your@email.com"
-                className="flex-1 rounded-pill border-[1.5px] border-brand-sand bg-white px-5 py-3 font-ui text-sm text-brand-navy outline-none transition-all placeholder:text-brand-sand focus:border-brand-gold focus:ring-2 focus:ring-brand-gold/10"
+                aria-label="Email address"
+                className="flex-1 rounded-pill border-[1.5px] border-brand-sand bg-white px-5 py-3.5 font-ui text-sm text-brand-navy outline-none transition-all placeholder:text-brand-sand focus:border-brand-gold focus:ring-2 focus:ring-brand-gold/10"
               />
               <button
                 type="submit"
-                className="btn-burgundy inline-flex items-center justify-center gap-2 whitespace-nowrap px-6 py-3"
+                className="group inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-pill bg-brand-burgundy px-6 py-3.5 font-ui text-sm font-medium uppercase tracking-wider text-white shadow-button transition-all duration-300 hover:-translate-y-0.5 hover:bg-brand-burgundy-light"
               >
                 Notify Me
-                <ArrowRight className="h-4 w-4" />
+                <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5" />
               </button>
             </form>
 
-            <p className="mt-3 font-ui text-[11px] text-brand-navy/30">
+            <p className="mt-4 font-ui text-[11px] text-brand-navy/30">
               No spam. Unsubscribe anytime.
             </p>
           </>
