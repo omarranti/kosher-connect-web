@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
+import { AdminEntryButton } from "@/components/marketing/admin-entry-button";
 
 const navLinks = [
   { label: "Features", href: "#features" },
@@ -51,6 +52,7 @@ export function MarketingNav() {
               {link.label}
             </a>
           ))}
+          <AdminEntryButton variant="nav" />
           <a href="#waitlist" className="btn-burgundy px-5 py-2 text-xs">
             Join Waitlist
           </a>
@@ -80,6 +82,9 @@ export function MarketingNav() {
                 {link.label}
               </a>
             ))}
+            <div className="flex items-center justify-between gap-4 pt-2">
+              <AdminEntryButton variant="nav" />
+            </div>
             <a
               href="#waitlist"
               onClick={() => setMobileOpen(false)}

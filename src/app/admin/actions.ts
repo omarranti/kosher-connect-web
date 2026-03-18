@@ -3,11 +3,13 @@
 import { signIn, signOut } from "@/auth";
 import { redirect } from "next/navigation";
 import { isRedirectError } from "next/dist/client/components/redirect-error";
+import { clearAdminPinCookie } from "@/lib/admin-pin-gate";
 
 const SIGN_IN_ERROR = "Invalid credentials or insufficient permissions.";
 
 export async function signOutAction() {
-  await signOut({ redirectTo: "/admin/login" });
+  await clearAdminPinCookie();
+  await signOut({ redirectTo: "/" });
 }
 
 export async function signInAction(formData: FormData) {

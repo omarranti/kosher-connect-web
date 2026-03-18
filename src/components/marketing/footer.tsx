@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { AdminEntryButton } from "@/components/marketing/admin-entry-button";
 
 const footerLinks = {
   product: [
@@ -121,8 +122,11 @@ export function MarketingFooter() {
         {/* Divider */}
         <div className="mt-12 border-t border-white/[0.06] pt-6">
           <div className="flex flex-col items-center justify-between gap-3 sm:flex-row">
-            <p className="font-ui text-xs text-white/30">
-              &copy; {new Date().getFullYear()} Kosher Connect. Made with love for the community.
+            <p className="font-ui text-xs text-white/30 flex flex-wrap items-center justify-center gap-x-3 gap-y-1">
+              <span>
+                &copy; {new Date().getFullYear()} Kosher Connect. Made with love for the community.
+              </span>
+              <AdminEntryButton variant="footer" />
             </p>
             <a
               href="#"

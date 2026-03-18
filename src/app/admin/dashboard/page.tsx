@@ -1,11 +1,36 @@
 import Link from "next/link";
+import type { EventStatus, ListingStatus, ListingType } from "@prisma/client";
 import { prisma } from "@/lib/db";
 
 export const dynamic = "force-dynamic";
 
+type RecentListing = {
+  id: string;
+  name: string;
+  type: ListingType;
+  city: string;
+  status: ListingStatus;
+  createdAt: Date;
+};
+type RecentEvent = {
+  id: string;
+  title: string;
+  city: string;
+  startDate: Date;
+  status: EventStatus;
+};
+
 export default async function DashboardPage() {
-  const [listingCount, userCount, eventCount, recentListings, recentEvents] =
-    await Promise.all([
+  let listingCount = 0;
+  let userCount = 0;
+  let eventCount = 0;
+  let categoryCount = 0;
+  let recentListings: RecentListing[] = [];
+  let recentEvents: RecentEvent[] = [];
+  let dbError: string | null = null;
+
+  try {
+    const [lc, uc, ec, rl, re] = await Promise.all([
       prisma.listing.count(),
       prisma.user.count(),
       prisma.event.count(),
@@ -21,8 +46,19 @@ export default async function DashboardPage() {
         select: { id: true, title: true, city: true, startDate: true, status: true },
       }),
     ]);
-
-  const categoryCount = await prisma.category.count();
+    listingCount = lc;
+    userCount = uc;
+    eventCount = ec;
+    recentListings = rl;
+    recentEvents = re;
+    categoryCount = await prisma.category.count();
+  } catch (e) {
+    console.error("[admin/dashboard]", e);
+    dbError =
+      e instanceof Error
+        ? e.message
+        : "Could not connect to the database. Check DATABASE_URL on Vercel.";
+  }
 
   const stats = [
     { label: "Total Listings", value: listingCount.toLocaleString() },
@@ -34,60 +70,77 @@ export default async function DashboardPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="font-display text-2xl font-bold text-brand-navy">
-          Dashboard
-        </h1>
+        <h1 className="font-display text-2xl font-bold text-brand-navy">Dashboard</h1>
         <p className="font-accent text-sm italic text-gray-500">
           Welcome back. Here&apos;s what&apos;s happening with Kosher Connect.
         </p>
       </div>
 
-      {/* Stats Grid */}
+      {dbError ? (
+        <div
+          className="rounded-brand border border-semantic-red/30 bg-red-50 p-6 text-brand-navy"
+          role="alert"
+        >
+          <p className="font-display text-lg font-semibold text-semantic-red">Database unavailable</p>
+          <p className="mt-2 font-ui text-sm text-gray-700">{dbError}</p>
+          <p className="mt-4 font-ui text-xs text-gray-500">
+            Set <code className="rounded bg-white px-1">DATABASE_URL</code> (and{" "}
+            <code className="rounded bg-white px-1">DIRECT_URL</code> if using Prisma) in your
+            hosting environment, then redeploy.
+          </p>
+        </div>
+      ) : null}
+
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
         {stats.map((stat) => (
           <div
             key={stat.label}
-            className="rounded-brand border border-gray-100 bg-white p-5"
+            className="rounded-brand border border-gray-100 bg-white p-5 shadow-sm"
           >
-            <p className="font-ui text-xs uppercase tracking-wider text-gray-400">
-              {stat.label}
-            </p>
-            <p className="mt-1 font-display text-2xl font-bold text-brand-navy">
-              {stat.value}
-            </p>
+            <p className="font-ui text-xs uppercase tracking-wider text-gray-400">{stat.label}</p>
+            <p className="mt-1 font-display text-2xl font-bold text-brand-navy">{stat.value}</p>
           </div>
         ))}
       </div>
 
-      {/* Recent data */}
       <div className="grid grid-cols-1 gap-6 xl:grid-cols-2">
-        {/* Recent Listings */}
-        <div className="rounded-brand border border-gray-100 bg-white p-6">
-          <div className="mb-4 flex items-center justify-between">
-            <h3 className="font-display text-lg font-semibold text-brand-navy">
-              Recent Listings
-            </h3>
-            <Link href="/admin/listings" className="font-ui text-xs font-medium text-brand-gold hover:text-brand-navy transition-colors">
+        <div className="rounded-brand border border-gray-100 bg-white p-6 shadow-sm">
+          <div className="mb-4 flex items-center justify-between gap-2">
+            <h3 className="font-display text-lg font-semibold text-brand-navy">Recent Listings</h3>
+            <Link
+              href="/admin/listings"
+              className="shrink-0 font-ui text-xs font-medium text-brand-gold hover:text-brand-navy transition-colors"
+            >
               View all →
             </Link>
           </div>
-          {recentListings.length === 0 ? (
-            <p className="font-accent text-sm italic text-gray-400">No listings yet. Run the seed to populate data.</p>
-          ) : (
+          {!dbError && recentListings.length === 0 ? (
+            <p className="font-accent text-sm italic text-gray-400">
+              No listings yet. Run the seed to populate data.
+            </p>
+          ) : dbError ? null : (
             <div className="space-y-3">
               {recentListings.map((listing) => (
                 <Link
                   key={listing.id}
                   href={`/admin/listings/${listing.id}`}
-                  className="flex items-center justify-between rounded-brand-sm border border-gray-50 p-3 transition-colors hover:bg-gray-50/50"
+                  className="flex flex-col gap-1 rounded-brand-sm border border-gray-50 p-3 transition-colors hover:bg-gray-50/50 sm:flex-row sm:items-center sm:justify-between"
                 >
-                  <div>
-                    <p className="font-display text-sm font-semibold text-brand-navy">{listing.name}</p>
-                    <p className="font-ui text-xs text-gray-400">{listing.type} · {listing.city}</p>
+                  <div className="min-w-0">
+                    <p className="font-display text-sm font-semibold text-brand-navy truncate">
+                      {listing.name}
+                    </p>
+                    <p className="font-ui text-xs text-gray-400">
+                      {listing.type} · {listing.city}
+                    </p>
                   </div>
-                  <span className={`rounded-pill px-2 py-0.5 font-ui text-[10px] font-medium ${
-                    listing.status === "ACTIVE" ? "bg-semantic-green-soft text-semantic-green" : "bg-orange-50 text-orange-500"
-                  }`}>
+                  <span
+                    className={`self-start rounded-pill px-2 py-0.5 font-ui text-[10px] font-medium sm:self-center ${
+                      listing.status === "ACTIVE"
+                        ? "bg-semantic-green-soft text-semantic-green"
+                        : "bg-orange-50 text-orange-500"
+                    }`}
+                  >
                     {listing.status}
                   </span>
                 </Link>
@@ -96,35 +149,48 @@ export default async function DashboardPage() {
           )}
         </div>
 
-        {/* Upcoming Events */}
-        <div className="rounded-brand border border-gray-100 bg-white p-6">
-          <div className="mb-4 flex items-center justify-between">
-            <h3 className="font-display text-lg font-semibold text-brand-navy">
-              Upcoming Events
-            </h3>
-            <Link href="/admin/events" className="font-ui text-xs font-medium text-brand-gold hover:text-brand-navy transition-colors">
+        <div className="rounded-brand border border-gray-100 bg-white p-6 shadow-sm">
+          <div className="mb-4 flex items-center justify-between gap-2">
+            <h3 className="font-display text-lg font-semibold text-brand-navy">Upcoming Events</h3>
+            <Link
+              href="/admin/events"
+              className="shrink-0 font-ui text-xs font-medium text-brand-gold hover:text-brand-navy transition-colors"
+            >
               View all →
             </Link>
           </div>
-          {recentEvents.length === 0 ? (
-            <p className="font-accent text-sm italic text-gray-400">No upcoming events. Run the seed to populate data.</p>
-          ) : (
+          {!dbError && recentEvents.length === 0 ? (
+            <p className="font-accent text-sm italic text-gray-400">
+              No upcoming events. Run the seed to populate data.
+            </p>
+          ) : dbError ? null : (
             <div className="space-y-3">
               {recentEvents.map((event) => (
                 <Link
                   key={event.id}
                   href={`/admin/events/${event.id}`}
-                  className="flex items-center justify-between rounded-brand-sm border border-gray-50 p-3 transition-colors hover:bg-gray-50/50"
+                  className="flex flex-col gap-1 rounded-brand-sm border border-gray-50 p-3 transition-colors hover:bg-gray-50/50 sm:flex-row sm:items-center sm:justify-between"
                 >
-                  <div>
-                    <p className="font-display text-sm font-semibold text-brand-navy">{event.title}</p>
+                  <div className="min-w-0">
+                    <p className="font-display text-sm font-semibold text-brand-navy truncate">
+                      {event.title}
+                    </p>
                     <p className="font-ui text-xs text-gray-400">
-                      {event.startDate.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })} · {event.city}
+                      {event.startDate.toLocaleDateString("en-US", {
+                        month: "short",
+                        day: "numeric",
+                        year: "numeric",
+                      })}{" "}
+                      · {event.city}
                     </p>
                   </div>
-                  <span className={`rounded-pill px-2 py-0.5 font-ui text-[10px] font-medium ${
-                    event.status === "PUBLISHED" ? "bg-semantic-green-soft text-semantic-green" : "bg-brand-gold-pale text-brand-navy"
-                  }`}>
+                  <span
+                    className={`self-start rounded-pill px-2 py-0.5 font-ui text-[10px] font-medium sm:self-center ${
+                      event.status === "PUBLISHED"
+                        ? "bg-semantic-green-soft text-semantic-green"
+                        : "bg-brand-gold-pale text-brand-navy"
+                    }`}
+                  >
                     {event.status}
                   </span>
                 </Link>

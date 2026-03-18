@@ -49,9 +49,9 @@ const config: Config = {
         },
       },
       fontFamily: {
-        display: ['Bodoni Moda', 'serif'],
-        accent: ['Crimson Pro', 'serif'],
-        ui: ['Josefin Sans', 'sans-serif'],
+        display: ['var(--font-display)', 'serif'],
+        accent: ['var(--font-accent)', 'serif'],
+        ui: ['var(--font-ui)', 'sans-serif'],
       },
       fontSize: {
         'h1': ['36px', { lineHeight: '1.1', fontWeight: '700' }],
