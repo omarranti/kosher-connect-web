@@ -158,19 +158,20 @@ export function WaitlistSection() {
                 />
               </div>
 
-              <button type="submit" className="btn-burgundy w-full py-4 text-base">
-                Try 7 Days Free ✡
+              <button type="submit" className="btn-burgundy w-full cursor-pointer py-4 text-base">
+                Try 7 Days Free
+                <svg className="ml-2 inline-block h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M12 5l7 7-7 7" /></svg>
               </button>
 
-              <p className="text-center font-ui text-[11px] text-brand-navy/30">
+              <p className="text-center font-ui text-[11px] text-brand-navy/50">
                 No spam, ever. Just community vibes and your early access invite.
               </p>
             </form>
           </>
         ) : (
           <div className="py-8 text-center">
-            <div className="mx-auto mb-5 grid h-[72px] w-[72px] place-items-center rounded-full bg-brand-gold-pale text-3xl">
-              🕯️
+            <div className="mx-auto mb-5 grid h-[72px] w-[72px] place-items-center rounded-full bg-brand-gold-pale">
+              <svg className="h-8 w-8 text-brand-gold" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2v8m0 0l-2-2m2 2l2-2" /><path d="M4.93 10.93a10 10 0 0 0 14.14 0" /><path d="M2.1 13.1a14 14 0 0 0 19.8 0" /><circle cx="12" cy="18" r="2" /></svg>
             </div>
             <h3 className="font-display text-2xl font-bold text-brand-gold">You&apos;re In!</h3>
             <p className="mt-3 font-accent text-sm leading-relaxed text-brand-navy/50">

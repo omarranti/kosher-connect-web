@@ -87,10 +87,10 @@ function PhoneMockup() {
         {/* Mood pills */}
         <div className="mb-3 grid grid-cols-2 gap-1.5">
           {[
-            { emoji: '🌧', label: 'Rough Day', on: false },
-            { emoji: '💨', label: 'Feeling Off', on: false },
-            { emoji: '☀️', label: 'Pretty Good', on: false },
-            { emoji: '✨', label: 'So Great ✓', on: true },
+            { icon: 'M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7z', label: 'Rough Day', on: false },
+            { icon: 'M17.7 7.7a7.5 7.5 0 1 0 0 10.6M9 12h12', label: 'Feeling Off', on: false },
+            { icon: 'M12 2v4m0 12v4m-7.07-3.93l2.83-2.83m8.48-8.48l2.83-2.83M2 12h4m12 0h4m-3.93 7.07l-2.83-2.83M7.76 7.76L4.93 4.93', label: 'Pretty Good', on: false },
+            { icon: 'M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.582a.5.5 0 0 1 0 .963L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z', label: 'So Great', on: true },
           ].map((m) => (
             <div
               key={m.label}
@@ -100,7 +100,9 @@ function PhoneMockup() {
                   : 'border-brand-sand bg-white text-brand-navy'
               }`}
             >
-              <span className="text-xs">{m.emoji}</span> {m.label}
+              <svg className="h-3 w-3 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d={m.icon} /></svg>
+              {m.label}
+              {m.on && <svg className="h-2.5 w-2.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12" /></svg>}
             </div>
           ))}
         </div>
@@ -109,11 +111,13 @@ function PhoneMockup() {
 
         {/* Event cards */}
         {[
-          { emoji: '🕯️', title: "Shabbat Dinner Rachel's", meta: 'Friday · 7:30 PM · 0.8 mi' },
-          { emoji: '🍞', title: 'Challah Bake Workshop', meta: 'Sunday · 2:00 PM · 1.2 mi' },
+          { icon: 'M12 2c.5 0 1 .2 1.4.5l3.6 3a1 1 0 0 1 .4.8v4.4a1 1 0 0 1-.4.8l-3.6 3a2 2 0 0 1-2.8 0l-3.6-3A1 1 0 0 1 6.6 10.7V6.3a1 1 0 0 1 .4-.8l3.6-3c.4-.3.9-.5 1.4-.5z', title: "Shabbat Dinner Rachel's", meta: 'Friday · 7:30 PM · 0.8 mi' },
+          { icon: 'M12 2a4 4 0 0 0-4 4v2H6a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2h-2V6a4 4 0 0 0-4-4z', title: 'Challah Bake Workshop', meta: 'Sunday · 2:00 PM · 1.2 mi' },
         ].map((e) => (
           <div key={e.title} className="mb-2 flex gap-2 rounded-xl border border-brand-sand bg-white p-2">
-            <div className="grid h-10 w-10 flex-shrink-0 place-items-center rounded-lg bg-brand-parchment text-sm">{e.emoji}</div>
+            <div className="grid h-10 w-10 flex-shrink-0 place-items-center rounded-lg bg-brand-parchment">
+              <svg className="h-4 w-4 text-brand-burgundy" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d={e.icon} /></svg>
+            </div>
             <div>
               <p className="font-ui text-[10px] font-bold text-brand-navy">{e.title}</p>
               <p className="font-ui text-[8px] text-brand-navy/40">{e.meta}</p>

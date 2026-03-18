@@ -5,7 +5,7 @@ export function QuoteStrip() {
         <em className="text-brand-gold">&ldquo;Even an ordinary meal can become holy</em>{' '}
         when it gathers people with intention.&rdquo;
       </p>
-      <p className="mt-3 font-ui text-sm text-white/40">
+      <p className="mt-3 font-ui text-sm text-white/60">
         — A Daily Nudge from Kosher Connect
       </p>
     </div>

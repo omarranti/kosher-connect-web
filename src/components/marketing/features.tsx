@@ -1,32 +1,49 @@
-const features = [
+import { MapPin, CalendarDays, Flame, Sparkles } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
+
+interface Feature {
+  num: string;
+  Icon: LucideIcon;
+  iconBg: string;
+  iconColor: string;
+  title: string;
+  description: string;
+  tags: string[];
+}
+
+const features: Feature[] = [
   {
     num: '01',
-    icon: '📍',
+    Icon: MapPin,
     iconBg: 'bg-brand-burgundy/10',
+    iconColor: 'text-brand-burgundy',
     title: 'Plug Into Kosher',
     description: 'Discover kosher gems around you on a live map. Filter by type, distance, price, and certification. Scan kosher labels with your camera.',
     tags: ['Map view', 'Ratings', 'Scanner', 'Filters'],
   },
   {
     num: '02',
-    icon: '📅',
+    Icon: CalendarDays,
     iconBg: 'bg-brand-gold-pale',
+    iconColor: 'text-brand-gold',
     title: 'Jewish Vibes Calendar',
     description: "From Shabbat to showcases, it's all here. Browse holidays and events, RSVP to dinners, stay in rhythm with Jewish life.",
     tags: ['Holidays', 'RSVP', 'Reminders'],
   },
   {
     num: '03',
-    icon: '🕯️',
+    Icon: Flame,
     iconBg: 'bg-brand-burgundy/10',
+    iconColor: 'text-brand-burgundy',
     title: 'The Simcha Table',
     description: 'For your Jewish celebrations. Find go-to vendors for catering, photography, decor, and music — Shabbat, simchas, weddings, and bar mitzvahs.',
     tags: ['Vendors', 'Reviews', 'Packages'],
   },
   {
     num: '04',
-    icon: '✨',
+    Icon: Sparkles,
     iconBg: 'bg-brand-navy/5',
+    iconColor: 'text-brand-navy',
     title: 'Daily Nudges',
     description: 'Time to unplug for Shabbat. Torah insights, Yiddish word of the day, Jewish life hacks — small moments, big meaning.',
     tags: ['Torah', 'Yiddish', 'Life hacks'],
@@ -61,8 +78,8 @@ export function FeaturesSection() {
               </span>
 
               {/* Icon */}
-              <div className={`mb-4 grid h-12 w-12 place-items-center rounded-brand-sm text-xl ${f.iconBg}`}>
-                {f.icon}
+              <div className={`mb-4 grid h-12 w-12 place-items-center rounded-brand-sm ${f.iconBg}`}>
+                <f.Icon className={`h-5 w-5 ${f.iconColor}`} strokeWidth={2} />
               </div>
 
               <h3 className="font-display text-lg font-bold text-brand-navy">{f.title}</h3>
