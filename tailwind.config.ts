@@ -6,6 +6,12 @@ const config: Config = {
     './src/components/**/*.{js,ts,jsx,tsx,mdx}',
     './src/app/**/*.{js,ts,jsx,tsx,mdx}',
   ],
+  safelist: [
+    'bg-brand-navy', 'bg-brand-cream', 'bg-brand-gold', 'bg-brand-burgundy', 'bg-brand-cream/80',
+    'text-brand-navy', 'text-brand-gold', 'text-white',
+    'font-display', 'font-accent', 'font-ui',
+    'animate-soft-breathe',
+  ],
   theme: {
     extend: {
       // ═══════════════════════════════════════
