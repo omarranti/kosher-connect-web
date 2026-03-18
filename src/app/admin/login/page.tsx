@@ -17,11 +17,10 @@ export default function AdminLoginPage() {
     const form = e.currentTarget;
     const formData = new FormData(form);
     formData.set("callbackUrl", callbackUrl);
-    try {
-      await signInAction(formData);
-    } catch {
+    const result = await signInAction(formData);
+    if (result?.error) {
       setLoading(false);
-      setError("Invalid email or password.");
+      setError(result.error);
     }
   }
 
