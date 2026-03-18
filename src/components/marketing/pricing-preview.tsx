@@ -89,8 +89,17 @@ export function PricingPreview() {
               )}
 
               <h4 className="font-ui text-sm font-bold text-brand-burgundy">{plan.name}</h4>
-              <p className="mt-3 font-display text-4xl font-black tracking-tight text-brand-navy">{plan.price}</p>
-              <p className="mt-1 font-ui text-xs text-brand-navy/40">{plan.period}</p>
+              <div className="mt-3 flex items-baseline gap-1">
+                <span className="font-ui text-4xl font-extrabold tabular-nums tracking-tight text-brand-navy">
+                  {plan.price.replace(/[^0-9.]/g, '').split('.')[0]}
+                </span>
+                <span className="font-ui text-lg font-bold tabular-nums text-brand-navy/60">
+                  .{plan.price.replace(/[^0-9.]/g, '').split('.')[1]}
+                </span>
+                <span className="font-ui text-sm font-medium text-brand-navy/40 ml-0.5">
+                  /{plan.period.split(' ')[1]}
+                </span>
+              </div>
               {plan.savings && (
                 <p className="mt-2 inline-flex items-center gap-1 rounded-pill bg-brand-gold-pale/40 px-3 py-1 font-ui text-xs font-semibold text-brand-gold">{plan.savings}</p>
               )}

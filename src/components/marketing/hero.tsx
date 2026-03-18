@@ -2,16 +2,15 @@ import { HeroEmailSignup } from "./hero-email-signup";
 
 export function HeroSection() {
   return (
-    <section className="relative min-h-screen overflow-hidden bg-brand-cream py-24 sm:py-32 md:py-0">
-      {/* Background orbs — layered depth */}
+    <section className="relative min-h-[100svh] overflow-hidden bg-brand-cream px-0 pb-12 pt-20 sm:px-6 sm:py-28 md:py-0">
+      {/* Background orbs */}
       <div className="pointer-events-none absolute inset-0">
         <div className="absolute -right-24 -top-48 h-[600px] w-[600px] rounded-full bg-brand-gold-pale/50 blur-[120px] animate-soft-breathe" />
         <div className="absolute -left-32 bottom-0 h-[400px] w-[400px] rounded-full bg-brand-burgundy/5 blur-[120px] animate-soft-breathe" style={{ animationDelay: '2s' }} />
         <div className="absolute left-1/3 top-1/3 h-[300px] w-[300px] rounded-full bg-brand-gold/8 blur-[100px] animate-soft-breathe" style={{ animationDelay: '4s' }} />
-        <div className="absolute right-1/4 bottom-1/4 h-[200px] w-[200px] rounded-full bg-brand-navy/[0.02] blur-[80px]" />
       </div>
 
-      {/* Subtle grid pattern overlay */}
+      {/* Grid pattern */}
       <div
         className="pointer-events-none absolute inset-0 opacity-[0.02]"
         style={{
@@ -20,39 +19,32 @@ export function HeroSection() {
         }}
       />
 
-      <div className="relative mx-auto grid min-w-0 max-w-7xl items-center gap-12 px-6 md:min-h-screen md:grid-cols-2 md:gap-16 md:px-10">
-        {/* Left — Copy */}
-        <div className="order-2 text-center md:order-1 md:text-left">
-          {/* Decorative accent line */}
-          <div className="mb-8 flex justify-center gap-1.5 md:justify-start">
-            <span className="h-[2px] w-8 rounded-full bg-brand-gold" />
-            <span className="h-[2px] w-4 rounded-full bg-brand-gold/40" />
-            <span className="h-[2px] w-2 rounded-full bg-brand-gold/20" />
-          </div>
-
+      <div className="relative mx-auto grid min-w-0 max-w-7xl items-center gap-8 px-4 sm:px-6 md:min-h-screen md:grid-cols-2 md:gap-16">
+        {/* Copy + Email — always first on mobile */}
+        <div className="order-1 text-center md:text-left">
           {/* Badge */}
-          <div className="mb-8 inline-flex items-center gap-2.5 rounded-pill border border-brand-sand bg-white/80 px-5 py-2.5 shadow-card backdrop-blur-sm">
+          <div className="mb-4 inline-flex items-center gap-2.5 rounded-pill border border-brand-sand bg-white/80 px-4 py-2 shadow-card backdrop-blur-sm sm:mb-8 sm:px-5 sm:py-2.5">
             <span className="relative flex h-2 w-2">
               <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-brand-burgundy/60" />
               <span className="relative inline-flex h-2 w-2 rounded-full bg-brand-burgundy" />
             </span>
-            <span className="font-ui text-xs font-medium tracking-wide text-brand-navy/70">Coming soon to iOS</span>
+            <span className="font-ui text-[11px] font-medium tracking-wide text-brand-navy/70 sm:text-xs">Coming soon to iOS</span>
           </div>
 
-          <h1 className="font-display text-[2.75rem] font-bold leading-[1.04] tracking-tight sm:text-5xl md:text-6xl lg:text-[4.5rem]">
+          <h1 className="font-display text-4xl font-bold leading-[1.04] tracking-tight sm:text-5xl md:text-6xl lg:text-[4.5rem]">
             <span className="text-brand-navy">What&apos;s up,</span>
             <br />
             <span className="bg-gradient-to-r from-brand-gold via-brand-gold-light to-brand-gold bg-clip-text text-transparent">friends?</span>
           </h1>
 
-          <p className="mx-auto mt-6 max-w-md font-accent text-base leading-relaxed text-brand-navy/50 sm:text-lg md:mx-0 md:text-xl">
-            Here&apos;s what&apos;s popping in your neighborhood. Kosher spots, events, daily nudges, and your people — one tap away.
+          <p className="mx-auto mt-4 max-w-md font-accent text-sm leading-relaxed text-brand-navy/50 sm:mt-6 sm:text-lg md:mx-0 md:text-xl">
+            Kosher spots, events, daily nudges, and your people — one tap away.
           </p>
 
           <HeroEmailSignup />
 
           {/* Social proof */}
-          <div className="mt-10 flex items-center justify-center gap-3 md:justify-start">
+          <div className="mt-6 flex items-center justify-center gap-3 sm:mt-10 md:justify-start">
             <div className="flex -space-x-2.5">
               {[
                 { letter: 'R', bg: 'bg-brand-navy', text: 'text-brand-gold-pale' },
@@ -62,26 +54,24 @@ export function HeroSection() {
               ].map((a) => (
                 <span
                   key={a.letter}
-                  className={`grid h-9 w-9 place-items-center rounded-full border-[2.5px] border-brand-cream ${a.bg} font-ui text-[11px] font-bold ${a.text} shadow-sm`}
+                  className={`grid h-8 w-8 place-items-center rounded-full border-2 border-brand-cream ${a.bg} font-ui text-[10px] font-bold ${a.text} shadow-sm sm:h-9 sm:w-9 sm:border-[2.5px] sm:text-[11px]`}
                 >
                   {a.letter}
                 </span>
               ))}
             </div>
             <div>
-              <p className="font-ui text-sm font-semibold text-brand-navy">200+ on the waitlist</p>
-              <p className="font-ui text-[11px] text-brand-navy/40">Join the community</p>
+              <p className="font-ui text-xs font-semibold text-brand-navy sm:text-sm">200+ on the waitlist</p>
+              <p className="font-ui text-[10px] text-brand-navy/40 sm:text-[11px]">Join the community</p>
             </div>
           </div>
         </div>
 
-        {/* Right — Phone mockup */}
-        <div className="order-1 flex justify-center md:order-2">
+        {/* Phone mockup — hidden on small phones, shown on taller screens */}
+        <div className="order-2 hidden justify-center sm:flex">
           <div className="relative animate-gentle-float">
-            {/* Glow behind phone */}
             <div className="absolute -inset-10 rounded-[48px] bg-gradient-to-b from-brand-gold/20 via-brand-gold-pale/10 to-transparent blur-3xl animate-glow-pulse" />
-            {/* Rotating ring accent */}
-            <div className="absolute -inset-4 animate-spin-slow rounded-[48px] bg-gradient-conic from-brand-gold/10 via-transparent to-brand-gold/10 opacity-50 blur-xl" style={{ background: 'conic-gradient(from 0deg, rgba(197,165,90,0.1), transparent, rgba(197,165,90,0.1))' }} />
+            <div className="absolute -inset-4 animate-spin-slow rounded-[48px] opacity-50 blur-xl" style={{ background: 'conic-gradient(from 0deg, rgba(197,165,90,0.1), transparent, rgba(197,165,90,0.1))' }} />
             <PhoneMockup />
           </div>
         </div>
@@ -171,7 +161,6 @@ function PhoneMockup() {
             {t.label}
           </div>
         ))}
-        {/* Center tab */}
         <div className="-mt-3 flex flex-1 flex-col items-center">
           <div className="grid h-10 w-10 place-items-center rounded-full bg-gradient-to-b from-brand-gold to-brand-gold-light font-ui text-[6px] font-bold text-brand-navy shadow-gold">
             <svg className="h-3 w-3" viewBox="0 0 24 24" fill="currentColor"><path d="M19 3H5a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2V5a2 2 0 00-2-2z" /></svg>
