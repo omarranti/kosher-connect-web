@@ -7,7 +7,7 @@ export function HeroEmailSignup() {
   const [submitted, setSubmitted] = useState(false);
   const [email, setEmail] = useState("");
 
-  function handleSubmit(e: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     if (!email) return;
 
@@ -16,6 +16,13 @@ export function HeroEmailSignup() {
     existing.push(entry);
     localStorage.setItem("kc_waitlist", JSON.stringify(existing));
     setSubmitted(true);
+
+    // Send welcome email (fire and forget)
+    fetch("/api/waitlist", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email }),
+    }).catch(() => {});
   }
 
   if (submitted) {

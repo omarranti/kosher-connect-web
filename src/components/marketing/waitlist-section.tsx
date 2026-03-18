@@ -37,11 +37,20 @@ export function WaitlistSection() {
       message: fd.get('message'),
       ts: new Date().toISOString(),
     };
-    // Store locally for now
+    // Store locally
     const existing = JSON.parse(localStorage.getItem('kc_waitlist') || '[]');
     existing.push(data);
     localStorage.setItem('kc_waitlist', JSON.stringify(existing));
     setSubmitted(true);
+
+    // Send welcome email (fire and forget)
+    if (data.email) {
+      fetch("/api/waitlist", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: data.email }),
+      }).catch(() => {});
+    }
   }
 
   return (

@@ -26,6 +26,13 @@ export default function ModeratorApplicationPage() {
     existing.push(data);
     localStorage.setItem("kc_moderator_apps", JSON.stringify(existing));
 
+    // Send confirmation email (fire and forget)
+    fetch("/api/moderator-apply", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name: data.name, email: data.email }),
+    }).catch(() => {});
+
     setLoading(false);
     setSubmitted(true);
   }

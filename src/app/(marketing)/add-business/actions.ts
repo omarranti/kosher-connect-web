@@ -1,6 +1,7 @@
 "use server";
 
 import { prisma } from "@/lib/db";
+import { sendVendorConfirmation } from "@/lib/email";
 
 export async function submitVendorListing(formData: FormData) {
   const name = (formData.get("name") as string)?.trim();
@@ -69,6 +70,13 @@ export async function submitVendorListing(formData: FormData) {
     });
   } catch {
     return { error: "Something went wrong. Please try again." };
+  }
+
+  // Send confirmation email (don't block on failure)
+  if (email) {
+    sendVendorConfirmation(email, name).catch((e) =>
+      console.error("[vendor email]", e)
+    );
   }
 
   return { success: true };
