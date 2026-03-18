@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
 
@@ -51,9 +50,6 @@ export function MarketingNav() {
               {link.label}
             </a>
           ))}
-          <Link href="/admin" className="font-ui text-sm font-medium text-brand-navy/50 transition-colors hover:text-brand-navy">
-            Admin
-          </Link>
           <a href="#waitlist" className="btn-burgundy px-5 py-2 text-xs">
             Join Waitlist
           </a>
