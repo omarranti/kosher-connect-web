@@ -17,7 +17,7 @@ export function MarketingNav() {
 
   return (
     <header className="sticky top-0 z-50 border-b border-brand-gold/10 bg-brand-cream/80 backdrop-blur-lg">
-      <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
+      <div className="safe-area-padding mx-auto flex min-w-0 max-w-7xl items-center justify-between px-4 py-4 sm:px-6">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-3">
           {/* TODO: Replace with SVG logo component */}

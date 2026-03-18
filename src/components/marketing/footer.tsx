@@ -29,8 +29,8 @@ const footerSections = [
 export function MarketingFooter() {
   return (
     <footer className="bg-brand-navy">
-      <div className="mx-auto max-w-7xl px-6 py-16">
-        <div className="grid grid-cols-2 gap-8 md:grid-cols-4">
+      <div className="mx-auto min-w-0 max-w-7xl px-4 py-12 sm:px-6 sm:py-16">
+        <div className="grid min-w-0 grid-cols-2 gap-6 sm:gap-8 md:grid-cols-4">
           {/* Brand */}
           <div className="col-span-2 md:col-span-1">
             <div className="mb-4 flex items-baseline gap-1.5">

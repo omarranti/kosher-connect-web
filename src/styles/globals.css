@@ -31,8 +31,21 @@
     --radius-pill: 100px;
   }
 
+  html {
+    -webkit-text-size-adjust: 100%;
+    -webkit-tap-highlight-color: transparent;
+  }
+
   body {
     @apply bg-brand-cream text-gray-900 font-ui antialiased;
+    min-width: 0;
+    overflow-x: hidden;
+  }
+
+  /* iOS safe area (notch/home indicator) — use with px-* for base padding */
+  .safe-area-padding {
+    padding-left: max(1rem, env(safe-area-inset-left));
+    padding-right: max(1rem, env(safe-area-inset-right));
   }
 
   h1, h2, h3 {
