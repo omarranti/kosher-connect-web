@@ -78,6 +78,10 @@ const config: Config = {
         'gentle-float': 'gentle-float 3s ease-in-out infinite',
         'spring-pop': 'spring-pop 0.2s cubic-bezier(0.34, 1.56, 0.64, 1)',
         'soft-breathe': 'soft-breathe 4s ease infinite',
+        'shimmer': 'shimmer 2.5s ease-in-out infinite',
+        'glow-pulse': 'glow-pulse 3s ease-in-out infinite',
+        'fade-in-up': 'fade-in-up 0.6s ease-out both',
+        'spin-slow': 'spin 8s linear infinite',
       },
       keyframes: {
         'gentle-float': {
@@ -92,6 +96,18 @@ const config: Config = {
         'soft-breathe': {
           '0%, 100%': { opacity: '0.3' },
           '50%': { opacity: '1' },
+        },
+        'shimmer': {
+          '0%': { backgroundPosition: '-200% 0' },
+          '100%': { backgroundPosition: '200% 0' },
+        },
+        'glow-pulse': {
+          '0%, 100%': { opacity: '0.4', transform: 'scale(1)' },
+          '50%': { opacity: '0.8', transform: 'scale(1.05)' },
+        },
+        'fade-in-up': {
+          '0%': { opacity: '0', transform: 'translateY(16px)' },
+          '100%': { opacity: '1', transform: 'translateY(0)' },
         },
       },
       transitionTimingFunction: {
