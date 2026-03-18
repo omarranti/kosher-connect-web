@@ -1,11 +1,48 @@
 import Link from "next/link";
+import { prisma } from "@/lib/db";
 
-export default function EventsPage() {
-  const events = [
-    { id: "1", title: "Shabbat Dinner Rachel's", date: "Friday 7:30 PM", location: "Los Angeles", attendees: 8, status: "Upcoming" },
-    { id: "2", title: "Challah Baking Workshop", date: "Sunday 2:00 PM", location: "Los Angeles", attendees: 12, status: "Upcoming" },
-    { id: "3", title: "Rosh Chodesh Tamuz Celebration", date: "Jun 26", location: "Multiple", attendees: 45, status: "Upcoming" },
-    { id: "4", title: "Shavuot Community Dinner", date: "Jun 11-13", location: "New York", attendees: 120, status: "Planning" },
+export const dynamic = "force-dynamic";
+
+export default async function EventsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ status?: string }>;
+}) {
+  const params = await searchParams;
+  const statusFilter = params.status?.toUpperCase();
+
+  const events = await prisma.event.findMany({
+    where: statusFilter ? { status: statusFilter as any } : undefined,
+    orderBy: { startDate: "asc" },
+    select: {
+      id: true,
+      title: true,
+      startDate: true,
+      endDate: true,
+      city: true,
+      state: true,
+      locationName: true,
+      status: true,
+      attendeeCount: true,
+      maxAttendees: true,
+      isRecurring: true,
+      isFree: true,
+      price: true,
+    },
+  });
+
+  const statusCounts = await prisma.event.groupBy({
+    by: ["status"],
+    _count: { id: true },
+  });
+
+  const filters = [
+    { label: "All", value: "", count: events.length },
+    ...statusCounts.map((s) => ({
+      label: s.status.charAt(0) + s.status.slice(1).toLowerCase(),
+      value: s.status,
+      count: s._count.id,
+    })),
   ];
 
   return (
@@ -14,7 +51,7 @@ export default function EventsPage() {
         <div>
           <h1 className="font-display text-2xl font-bold text-brand-navy">Events</h1>
           <p className="font-accent text-sm italic text-gray-500">
-            Manage community events, holidays, and gatherings.
+            {events.length} community events, holidays, and gatherings.
           </p>
         </div>
         <Link href="/admin/events/new" className="btn-burgundy text-xs">
@@ -24,13 +61,18 @@ export default function EventsPage() {
 
       {/* Filters */}
       <div className="flex flex-wrap gap-2">
-        {["All", "Upcoming", "Planning", "Past", "Holidays"].map((filter) => (
-          <button
-            key={filter}
-            className="rounded-pill border border-gray-200 bg-white px-4 py-1.5 font-ui text-xs text-gray-600 transition-colors hover:border-brand-gold hover:text-brand-navy"
+        {filters.map((filter) => (
+          <Link
+            key={filter.label}
+            href={filter.value ? `/admin/events?status=${filter.value}` : "/admin/events"}
+            className={`rounded-pill border px-4 py-1.5 font-ui text-xs transition-colors ${
+              (statusFilter === filter.value) || (!statusFilter && !filter.value)
+                ? "border-brand-gold bg-brand-gold-pale text-brand-navy font-medium"
+                : "border-gray-200 bg-white text-gray-600 hover:border-brand-gold hover:text-brand-navy"
+            }`}
           >
-            {filter}
-          </button>
+            {filter.label} ({filter.count})
+          </Link>
         ))}
       </div>
 
@@ -45,25 +87,46 @@ export default function EventsPage() {
             <div className="flex items-start justify-between">
               <div>
                 <h3 className="font-display text-lg font-semibold text-brand-navy">{event.title}</h3>
-                <p className="mt-1 font-ui text-xs text-gray-400">{event.date} · {event.location}</p>
+                <p className="mt-1 font-ui text-xs text-gray-400">
+                  {event.startDate.toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric", year: "numeric" })}
+                  {event.endDate && ` – ${event.endDate.toLocaleDateString("en-US", { month: "short", day: "numeric" })}`}
+                </p>
+                <p className="font-ui text-xs text-gray-400">
+                  {event.locationName ? `${event.locationName} · ` : ""}{event.city}, {event.state}
+                </p>
               </div>
-              <span className={`tag-brand ${event.status === "Upcoming" ? "bg-semantic-green-soft text-semantic-green" : "bg-brand-gold-pale text-brand-navy"}`}>
+              <span className={`rounded-pill px-2.5 py-0.5 font-ui text-[10px] font-medium ${
+                event.status === "PUBLISHED"
+                  ? "bg-semantic-green-soft text-semantic-green"
+                  : event.status === "DRAFT"
+                  ? "bg-brand-gold-pale text-brand-navy"
+                  : event.status === "CANCELLED"
+                  ? "bg-red-50 text-red-500"
+                  : "bg-gray-100 text-gray-500"
+              }`}>
                 {event.status}
               </span>
             </div>
-            <div className="mt-4 flex items-center gap-2">
-              <div className="flex -space-x-2">
-                {[...Array(Math.min(event.attendees, 3))].map((_, i) => (
-                  <div key={i} className="h-6 w-6 rounded-full border-2 border-white bg-brand-gold/20" />
-                ))}
-              </div>
+            <div className="mt-4 flex items-center gap-4">
+              {event.isRecurring && (
+                <span className="font-ui text-[11px] text-brand-gold">↻ Recurring</span>
+              )}
               <span className="font-ui text-xs text-gray-400">
-                {event.attendees} attending
+                {event.attendeeCount} attending{event.maxAttendees ? ` / ${event.maxAttendees} max` : ""}
+              </span>
+              <span className="font-ui text-xs text-gray-400">
+                {event.isFree ? "Free" : `$${event.price?.toFixed(2)}`}
               </span>
             </div>
           </Link>
         ))}
       </div>
+
+      {events.length === 0 && (
+        <div className="rounded-brand border border-gray-100 bg-white px-5 py-12 text-center">
+          <p className="font-accent text-sm italic text-gray-400">No events found. Run the seed to populate data.</p>
+        </div>
+      )}
     </div>
   );
 }

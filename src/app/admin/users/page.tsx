@@ -1,17 +1,30 @@
-export default function UsersPage() {
-  const users = [
-    { id: "1", name: "Omar Cohen", email: "omar@example.com", plan: "Family", status: "Active", joined: "Jan 2026" },
-    { id: "2", name: "Rachel Levi", email: "rachel@example.com", plan: "Monthly", status: "Active", joined: "Feb 2026" },
-    { id: "3", name: "David Stern", email: "david@example.com", plan: "Yearly", status: "Active", joined: "Mar 2026" },
-    { id: "4", name: "Sarah Gold", email: "sarah@example.com", plan: "Monthly", status: "Trial", joined: "Mar 2026" },
-  ];
+import Link from "next/link";
+import { prisma } from "@/lib/db";
+
+export const dynamic = "force-dynamic";
+
+export default async function UsersPage() {
+  const users = await prisma.user.findMany({
+    orderBy: { createdAt: "desc" },
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      role: true,
+      plan: true,
+      createdAt: true,
+      _count: {
+        select: { listings: true, events: true },
+      },
+    },
+  });
 
   return (
     <div className="space-y-6">
       <div>
         <h1 className="font-display text-2xl font-bold text-brand-navy">Users</h1>
         <p className="font-accent text-sm italic text-gray-500">
-          Manage subscribers, trials, and community members.
+          {users.length} registered user{users.length !== 1 ? "s" : ""}.
         </p>
       </div>
 
@@ -20,8 +33,9 @@ export default function UsersPage() {
           <thead>
             <tr className="border-b border-gray-100 bg-gray-50/50">
               <th className="px-5 py-3 text-left font-ui text-xs font-medium uppercase tracking-wider text-gray-400">User</th>
+              <th className="px-5 py-3 text-left font-ui text-xs font-medium uppercase tracking-wider text-gray-400">Role</th>
               <th className="px-5 py-3 text-left font-ui text-xs font-medium uppercase tracking-wider text-gray-400">Plan</th>
-              <th className="px-5 py-3 text-left font-ui text-xs font-medium uppercase tracking-wider text-gray-400">Status</th>
+              <th className="px-5 py-3 text-left font-ui text-xs font-medium uppercase tracking-wider text-gray-400">Content</th>
               <th className="px-5 py-3 text-left font-ui text-xs font-medium uppercase tracking-wider text-gray-400">Joined</th>
               <th className="px-5 py-3" />
             </tr>
@@ -31,28 +45,46 @@ export default function UsersPage() {
               <tr key={user.id} className="transition-colors hover:bg-gray-50/50">
                 <td className="px-5 py-4">
                   <div>
-                    <p className="font-display text-sm font-semibold text-brand-navy">{user.name}</p>
+                    <p className="font-display text-sm font-semibold text-brand-navy">{user.name || "Unnamed"}</p>
                     <p className="font-ui text-xs text-gray-400">{user.email}</p>
                   </div>
                 </td>
                 <td className="px-5 py-4">
-                  <span className="tag-brand bg-brand-gold-pale text-brand-navy">{user.plan}</span>
-                </td>
-                <td className="px-5 py-4">
-                  <span className={`tag-brand ${user.status === "Active" ? "bg-semantic-green-soft text-semantic-green" : "bg-blue-50 text-blue-500"}`}>
-                    {user.status}
+                  <span className={`rounded-pill px-2.5 py-0.5 font-ui text-[11px] font-medium ${
+                    user.role === "SUPER_ADMIN"
+                      ? "bg-brand-burgundy/10 text-brand-burgundy"
+                      : user.role === "ADMIN"
+                      ? "bg-brand-gold-pale text-brand-navy"
+                      : "bg-gray-100 text-gray-500"
+                  }`}>
+                    {user.role}
                   </span>
                 </td>
-                <td className="px-5 py-4 font-ui text-sm text-gray-500">{user.joined}</td>
+                <td className="px-5 py-4">
+                  <span className="rounded-pill bg-brand-gold-pale px-2.5 py-0.5 font-ui text-[11px] font-medium text-brand-navy">
+                    {user.plan}
+                  </span>
+                </td>
+                <td className="px-5 py-4 font-ui text-xs text-gray-500">
+                  {user._count.listings} listings · {user._count.events} events
+                </td>
+                <td className="px-5 py-4 font-ui text-sm text-gray-500">
+                  {user.createdAt.toLocaleDateString("en-US", { month: "short", year: "numeric" })}
+                </td>
                 <td className="px-5 py-4 text-right">
-                  <a href={`/admin/users/${user.id}`} className="font-ui text-xs font-medium text-brand-gold hover:text-brand-navy transition-colors">
+                  <Link href={`/admin/users/${user.id}`} className="font-ui text-xs font-medium text-brand-gold hover:text-brand-navy transition-colors">
                     View →
-                  </a>
+                  </Link>
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
+        {users.length === 0 && (
+          <div className="px-5 py-12 text-center">
+            <p className="font-accent text-sm italic text-gray-400">No users yet.</p>
+          </div>
+        )}
       </div>
     </div>
   );

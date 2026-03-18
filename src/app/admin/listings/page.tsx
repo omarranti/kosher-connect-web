@@ -1,12 +1,45 @@
 import Link from "next/link";
+import { prisma } from "@/lib/db";
 
-export default function ListingsPage() {
-  // TODO: Replace with real data from Prisma
-  const listings = [
-    { id: "1", name: "Dinner Rachel's", type: "Restaurant", city: "Los Angeles", status: "Active", rating: 5.0 },
-    { id: "2", name: "Kosh Catering", type: "Caterer", city: "Los Angeles", status: "Active", rating: 5.0 },
-    { id: "3", name: "Challah Baking Workshop", type: "Workshop", city: "Los Angeles", status: "Pending", rating: null },
-    { id: "4", name: "Shabbat Unique", type: "Restaurant", city: "New York", status: "Active", rating: 4.8 },
+export const dynamic = "force-dynamic";
+
+export default async function ListingsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ type?: string }>;
+}) {
+  const params = await searchParams;
+  const typeFilter = params.type?.toUpperCase();
+
+  const listings = await prisma.listing.findMany({
+    where: typeFilter ? { type: typeFilter as any } : undefined,
+    orderBy: { createdAt: "desc" },
+    select: {
+      id: true,
+      name: true,
+      type: true,
+      city: true,
+      state: true,
+      status: true,
+      rating: true,
+      kosherCertifier: true,
+      phone: true,
+    },
+  });
+
+  const typeCounts = await prisma.listing.groupBy({
+    by: ["type"],
+    _count: { id: true },
+    orderBy: { _count: { id: "desc" } },
+  });
+
+  const filterTypes = [
+    { label: "All", value: "", count: listings.length },
+    ...typeCounts.map((t) => ({
+      label: t.type.charAt(0) + t.type.slice(1).toLowerCase(),
+      value: t.type,
+      count: t._count.id,
+    })),
   ];
 
   return (
@@ -15,7 +48,7 @@ export default function ListingsPage() {
         <div>
           <h1 className="font-display text-2xl font-bold text-brand-navy">Listings</h1>
           <p className="font-accent text-sm italic text-gray-500">
-            Manage kosher restaurants, vendors, workshops, and markets.
+            {listings.length} kosher restaurants, vendors, workshops, and markets.
           </p>
         </div>
         <Link href="/admin/listings/new" className="btn-burgundy text-xs">
@@ -25,13 +58,18 @@ export default function ListingsPage() {
 
       {/* Filters */}
       <div className="flex flex-wrap gap-2">
-        {["All", "Restaurant", "Caterer", "Market", "Workshop", "Vendor"].map((filter) => (
-          <button
-            key={filter}
-            className="rounded-pill border border-gray-200 bg-white px-4 py-1.5 font-ui text-xs text-gray-600 transition-colors hover:border-brand-gold hover:text-brand-navy"
+        {filterTypes.map((filter) => (
+          <Link
+            key={filter.label}
+            href={filter.value ? `/admin/listings?type=${filter.value}` : "/admin/listings"}
+            className={`rounded-pill border px-4 py-1.5 font-ui text-xs transition-colors ${
+              (typeFilter === filter.value) || (!typeFilter && !filter.value)
+                ? "border-brand-gold bg-brand-gold-pale text-brand-navy font-medium"
+                : "border-gray-200 bg-white text-gray-600 hover:border-brand-gold hover:text-brand-navy"
+            }`}
           >
-            {filter}
-          </button>
+            {filter.label} ({filter.count})
+          </Link>
         ))}
       </div>
 
@@ -43,6 +81,7 @@ export default function ListingsPage() {
               <th className="px-5 py-3 text-left font-ui text-xs font-medium uppercase tracking-wider text-gray-400">Name</th>
               <th className="px-5 py-3 text-left font-ui text-xs font-medium uppercase tracking-wider text-gray-400">Type</th>
               <th className="px-5 py-3 text-left font-ui text-xs font-medium uppercase tracking-wider text-gray-400">City</th>
+              <th className="px-5 py-3 text-left font-ui text-xs font-medium uppercase tracking-wider text-gray-400">Certification</th>
               <th className="px-5 py-3 text-left font-ui text-xs font-medium uppercase tracking-wider text-gray-400">Status</th>
               <th className="px-5 py-3 text-left font-ui text-xs font-medium uppercase tracking-wider text-gray-400">Rating</th>
               <th className="px-5 py-3" />
@@ -51,18 +90,32 @@ export default function ListingsPage() {
           <tbody className="divide-y divide-gray-50">
             {listings.map((listing) => (
               <tr key={listing.id} className="transition-colors hover:bg-gray-50/50">
-                <td className="px-5 py-4 font-display text-sm font-semibold text-brand-navy">{listing.name}</td>
                 <td className="px-5 py-4">
-                  <span className="tag-brand bg-brand-gold-pale text-brand-navy">{listing.type}</span>
+                  <p className="font-display text-sm font-semibold text-brand-navy">{listing.name}</p>
+                  {listing.phone && <p className="font-ui text-[11px] text-gray-400">{listing.phone}</p>}
                 </td>
-                <td className="px-5 py-4 font-ui text-sm text-gray-500">{listing.city}</td>
                 <td className="px-5 py-4">
-                  <span className={`tag-brand ${listing.status === "Active" ? "bg-semantic-green-soft text-semantic-green" : "bg-orange-50 text-orange-500"}`}>
+                  <span className="rounded-pill bg-brand-gold-pale px-2.5 py-0.5 font-ui text-[11px] font-medium text-brand-navy">
+                    {listing.type}
+                  </span>
+                </td>
+                <td className="px-5 py-4 font-ui text-sm text-gray-500">{listing.city}, {listing.state}</td>
+                <td className="px-5 py-4 font-ui text-sm text-gray-500">
+                  {listing.kosherCertifier !== "NONE" ? listing.kosherCertifier : "—"}
+                </td>
+                <td className="px-5 py-4">
+                  <span className={`rounded-pill px-2.5 py-0.5 font-ui text-[11px] font-medium ${
+                    listing.status === "ACTIVE"
+                      ? "bg-semantic-green-soft text-semantic-green"
+                      : listing.status === "PENDING"
+                      ? "bg-orange-50 text-orange-500"
+                      : "bg-gray-100 text-gray-500"
+                  }`}>
                     {listing.status}
                   </span>
                 </td>
                 <td className="px-5 py-4 font-ui text-sm text-gray-600">
-                  {listing.rating ? `★ ${listing.rating}` : "—"}
+                  {listing.rating ? `★ ${listing.rating.toFixed(1)}` : "—"}
                 </td>
                 <td className="px-5 py-4 text-right">
                   <Link href={`/admin/listings/${listing.id}`} className="font-ui text-xs font-medium text-brand-gold hover:text-brand-navy transition-colors">
@@ -73,6 +126,11 @@ export default function ListingsPage() {
             ))}
           </tbody>
         </table>
+        {listings.length === 0 && (
+          <div className="px-5 py-12 text-center">
+            <p className="font-accent text-sm italic text-gray-400">No listings found. Run the seed to populate data.</p>
+          </div>
+        )}
       </div>
     </div>
   );
