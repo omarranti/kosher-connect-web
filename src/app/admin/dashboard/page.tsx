@@ -1,33 +1,34 @@
-import { prisma } from "@/lib/db";
 import Link from "next/link";
+import { prisma } from "@/lib/db";
 
 export const dynamic = "force-dynamic";
 
 export default async function DashboardPage() {
-  const [totalListings, activeListings, totalUsers, totalEvents, recentListings, cityBreakdown] =
+  const [listingCount, userCount, eventCount, recentListings, recentEvents] =
     await Promise.all([
       prisma.listing.count(),
-      prisma.listing.count({ where: { status: "ACTIVE" } }),
       prisma.user.count(),
       prisma.event.count(),
       prisma.listing.findMany({
         orderBy: { createdAt: "desc" },
-        take: 8,
-        select: { id: true, name: true, type: true, city: true, state: true, status: true, kosherCertifier: true, createdAt: true },
+        take: 5,
+        select: { id: true, name: true, type: true, city: true, status: true, createdAt: true },
       }),
-      prisma.listing.groupBy({
-        by: ["city", "state"],
-        _count: { id: true },
-        orderBy: { _count: { id: "desc" } },
-        take: 8,
+      prisma.event.findMany({
+        orderBy: { startDate: "asc" },
+        where: { startDate: { gte: new Date() } },
+        take: 5,
+        select: { id: true, title: true, city: true, startDate: true, status: true },
       }),
     ]);
 
+  const categoryCount = await prisma.category.count();
+
   const stats = [
-    { label: "Total Listings", value: totalListings.toLocaleString() },
-    { label: "Active Listings", value: activeListings.toLocaleString() },
-    { label: "Total Users", value: totalUsers.toLocaleString() },
-    { label: "Events", value: totalEvents.toLocaleString() },
+    { label: "Total Listings", value: listingCount.toLocaleString() },
+    { label: "Users", value: userCount.toLocaleString() },
+    { label: "Events", value: eventCount.toLocaleString() },
+    { label: "Categories", value: categoryCount.toLocaleString() },
   ];
 
   return (
@@ -58,54 +59,78 @@ export default async function DashboardPage() {
         ))}
       </div>
 
-      {/* Content sections */}
+      {/* Recent data */}
       <div className="grid grid-cols-1 gap-6 xl:grid-cols-2">
         {/* Recent Listings */}
         <div className="rounded-brand border border-gray-100 bg-white p-6">
-          <div className="flex items-center justify-between mb-4">
+          <div className="mb-4 flex items-center justify-between">
             <h3 className="font-display text-lg font-semibold text-brand-navy">
               Recent Listings
             </h3>
             <Link href="/admin/listings" className="font-ui text-xs font-medium text-brand-gold hover:text-brand-navy transition-colors">
-              View all &rarr;
+              View all →
             </Link>
           </div>
-          <div className="space-y-3">
-            {recentListings.map((listing) => (
-              <div key={listing.id} className="flex items-center justify-between py-2 border-b border-gray-50 last:border-0">
-                <div>
-                  <p className="font-display text-sm font-semibold text-brand-navy">{listing.name}</p>
-                  <p className="font-ui text-xs text-gray-400">{listing.city}, {listing.state} &middot; {listing.type.toLowerCase()}</p>
-                </div>
-                <span className={`tag-brand text-xs ${listing.status === "ACTIVE" ? "bg-semantic-green-soft text-semantic-green" : "bg-orange-50 text-orange-500"}`}>
-                  {listing.status}
-                </span>
-              </div>
-            ))}
-          </div>
+          {recentListings.length === 0 ? (
+            <p className="font-accent text-sm italic text-gray-400">No listings yet. Run the seed to populate data.</p>
+          ) : (
+            <div className="space-y-3">
+              {recentListings.map((listing) => (
+                <Link
+                  key={listing.id}
+                  href={`/admin/listings/${listing.id}`}
+                  className="flex items-center justify-between rounded-brand-sm border border-gray-50 p-3 transition-colors hover:bg-gray-50/50"
+                >
+                  <div>
+                    <p className="font-display text-sm font-semibold text-brand-navy">{listing.name}</p>
+                    <p className="font-ui text-xs text-gray-400">{listing.type} · {listing.city}</p>
+                  </div>
+                  <span className={`rounded-pill px-2 py-0.5 font-ui text-[10px] font-medium ${
+                    listing.status === "ACTIVE" ? "bg-semantic-green-soft text-semantic-green" : "bg-orange-50 text-orange-500"
+                  }`}>
+                    {listing.status}
+                  </span>
+                </Link>
+              ))}
+            </div>
+          )}
         </div>
 
-        {/* City Breakdown */}
+        {/* Upcoming Events */}
         <div className="rounded-brand border border-gray-100 bg-white p-6">
-          <h3 className="font-display text-lg font-semibold text-brand-navy mb-4">
-            Listings by City
-          </h3>
-          <div className="space-y-3">
-            {cityBreakdown.map((row) => (
-              <div key={`${row.city}-${row.state}`} className="flex items-center justify-between py-2 border-b border-gray-50 last:border-0">
-                <span className="font-ui text-sm text-gray-700">{row.city}, {row.state}</span>
-                <div className="flex items-center gap-3">
-                  <div className="w-24 h-2 bg-gray-100 rounded-full overflow-hidden">
-                    <div
-                      className="h-full bg-brand-gold rounded-full"
-                      style={{ width: `${(row._count.id / totalListings) * 100}%` }}
-                    />
-                  </div>
-                  <span className="font-display text-sm font-bold text-brand-navy w-8 text-right">{row._count.id}</span>
-                </div>
-              </div>
-            ))}
+          <div className="mb-4 flex items-center justify-between">
+            <h3 className="font-display text-lg font-semibold text-brand-navy">
+              Upcoming Events
+            </h3>
+            <Link href="/admin/events" className="font-ui text-xs font-medium text-brand-gold hover:text-brand-navy transition-colors">
+              View all →
+            </Link>
           </div>
+          {recentEvents.length === 0 ? (
+            <p className="font-accent text-sm italic text-gray-400">No upcoming events. Run the seed to populate data.</p>
+          ) : (
+            <div className="space-y-3">
+              {recentEvents.map((event) => (
+                <Link
+                  key={event.id}
+                  href={`/admin/events/${event.id}`}
+                  className="flex items-center justify-between rounded-brand-sm border border-gray-50 p-3 transition-colors hover:bg-gray-50/50"
+                >
+                  <div>
+                    <p className="font-display text-sm font-semibold text-brand-navy">{event.title}</p>
+                    <p className="font-ui text-xs text-gray-400">
+                      {event.startDate.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })} · {event.city}
+                    </p>
+                  </div>
+                  <span className={`rounded-pill px-2 py-0.5 font-ui text-[10px] font-medium ${
+                    event.status === "PUBLISHED" ? "bg-semantic-green-soft text-semantic-green" : "bg-brand-gold-pale text-brand-navy"
+                  }`}>
+                    {event.status}
+                  </span>
+                </Link>
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </div>

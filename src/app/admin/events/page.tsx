@@ -1,47 +1,49 @@
-import { prisma } from "@/lib/db";
 import Link from "next/link";
-import { format } from "date-fns";
+import { prisma } from "@/lib/db";
 
 export const dynamic = "force-dynamic";
 
 export default async function EventsPage({
   searchParams,
 }: {
-  searchParams: Promise<{ status?: string; page?: string }>;
+  searchParams: Promise<{ status?: string }>;
 }) {
   const params = await searchParams;
-  const status = params.status;
-  const page = parseInt(params.page ?? "1", 10);
-  const limit = 20;
+  const statusFilter = params.status?.toUpperCase();
 
-  const where: Record<string, unknown> = {};
-  if (status) where.status = status;
+  const events = await prisma.event.findMany({
+    where: statusFilter ? { status: statusFilter as any } : undefined,
+    orderBy: { startDate: "asc" },
+    select: {
+      id: true,
+      title: true,
+      startDate: true,
+      endDate: true,
+      city: true,
+      state: true,
+      locationName: true,
+      status: true,
+      attendeeCount: true,
+      maxAttendees: true,
+      isRecurring: true,
+      isFree: true,
+      price: true,
+    },
+  });
 
-  const [events, total] = await Promise.all([
-    prisma.event.findMany({
-      where,
-      orderBy: { startDate: "asc" },
-      skip: (page - 1) * limit,
-      take: limit,
-      select: {
-        id: true,
-        title: true,
-        status: true,
-        startDate: true,
-        endDate: true,
-        city: true,
-        state: true,
-        locationName: true,
-        attendeeCount: true,
-        isFree: true,
-        price: true,
-        isRecurring: true,
-      },
-    }),
-    prisma.event.count({ where }),
-  ]);
+  const statusCounts = await prisma.event.groupBy({
+    by: ["status"],
+    _count: { id: true },
+  });
 
-  const totalPages = Math.ceil(total / limit);
+  const filters = [
+    { label: "All", value: "", count: events.length },
+    ...statusCounts.map((s) => ({
+      label: s.status.charAt(0) + s.status.slice(1).toLowerCase(),
+      value: s.status,
+      count: s._count.id,
+    })),
+  ];
 
   return (
     <div className="space-y-6">
@@ -49,7 +51,7 @@ export default async function EventsPage({
         <div>
           <h1 className="font-display text-2xl font-bold text-brand-navy">Events</h1>
           <p className="font-accent text-sm italic text-gray-500">
-            {total} community events, holidays, and gatherings.
+            {events.length} community events, holidays, and gatherings.
           </p>
         </div>
         <Link href="/admin/events/new" className="btn-burgundy text-xs">
@@ -59,19 +61,17 @@ export default async function EventsPage({
 
       {/* Filters */}
       <div className="flex flex-wrap gap-2">
-        {[
-          { label: "All", value: undefined },
-          { label: "Published", value: "PUBLISHED" },
-          { label: "Draft", value: "DRAFT" },
-          { label: "Cancelled", value: "CANCELLED" },
-          { label: "Past", value: "PAST" },
-        ].map((filter) => (
+        {filters.map((filter) => (
           <Link
             key={filter.label}
             href={filter.value ? `/admin/events?status=${filter.value}` : "/admin/events"}
-            className={`rounded-pill border px-4 py-1.5 font-ui text-xs transition-colors ${status === filter.value || (!status && !filter.value) ? "border-brand-gold bg-brand-gold-pale text-brand-navy font-medium" : "border-gray-200 bg-white text-gray-600 hover:border-brand-gold hover:text-brand-navy"}`}
+            className={`rounded-pill border px-4 py-1.5 font-ui text-xs transition-colors ${
+              (statusFilter === filter.value) || (!statusFilter && !filter.value)
+                ? "border-brand-gold bg-brand-gold-pale text-brand-navy font-medium"
+                : "border-gray-200 bg-white text-gray-600 hover:border-brand-gold hover:text-brand-navy"
+            }`}
           >
-            {filter.label}
+            {filter.label} ({filter.count})
           </Link>
         ))}
       </div>
@@ -88,64 +88,43 @@ export default async function EventsPage({
               <div>
                 <h3 className="font-display text-lg font-semibold text-brand-navy">{event.title}</h3>
                 <p className="mt-1 font-ui text-xs text-gray-400">
-                  {format(new Date(event.startDate), "EEE, MMM d · h:mm a")} &middot; {event.city}, {event.state}
+                  {event.startDate.toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric", year: "numeric" })}
+                  {event.endDate && ` – ${event.endDate.toLocaleDateString("en-US", { month: "short", day: "numeric" })}`}
                 </p>
-                {event.locationName && (
-                  <p className="mt-0.5 font-ui text-xs text-gray-400">{event.locationName}</p>
-                )}
+                <p className="font-ui text-xs text-gray-400">
+                  {event.locationName ? `${event.locationName} · ` : ""}{event.city}, {event.state}
+                </p>
               </div>
-              <span className={`tag-brand ${event.status === "PUBLISHED" ? "bg-semantic-green-soft text-semantic-green" : event.status === "DRAFT" ? "bg-brand-gold-pale text-brand-navy" : event.status === "CANCELLED" ? "bg-red-50 text-red-500" : "bg-gray-100 text-gray-500"}`}>
+              <span className={`rounded-pill px-2.5 py-0.5 font-ui text-[10px] font-medium ${
+                event.status === "PUBLISHED"
+                  ? "bg-semantic-green-soft text-semantic-green"
+                  : event.status === "DRAFT"
+                  ? "bg-brand-gold-pale text-brand-navy"
+                  : event.status === "CANCELLED"
+                  ? "bg-red-50 text-red-500"
+                  : "bg-gray-100 text-gray-500"
+              }`}>
                 {event.status}
               </span>
             </div>
             <div className="mt-4 flex items-center gap-4">
-              <div className="flex items-center gap-2">
-                <div className="flex -space-x-2">
-                  {[...Array(Math.min(event.attendeeCount, 3))].map((_, i) => (
-                    <div key={i} className="h-6 w-6 rounded-full border-2 border-white bg-brand-gold/20" />
-                  ))}
-                </div>
-                <span className="font-ui text-xs text-gray-400">
-                  {event.attendeeCount} attending
-                </span>
-              </div>
               {event.isRecurring && (
-                <span className="font-ui text-xs text-brand-gold">Recurring</span>
+                <span className="font-ui text-[11px] text-brand-gold">↻ Recurring</span>
               )}
-              {event.isFree ? (
-                <span className="font-ui text-xs text-semantic-green">Free</span>
-              ) : event.price ? (
-                <span className="font-ui text-xs text-gray-500">${event.price}</span>
-              ) : null}
+              <span className="font-ui text-xs text-gray-400">
+                {event.attendeeCount} attending{event.maxAttendees ? ` / ${event.maxAttendees} max` : ""}
+              </span>
+              <span className="font-ui text-xs text-gray-400">
+                {event.isFree ? "Free" : `$${event.price?.toFixed(2)}`}
+              </span>
             </div>
           </Link>
         ))}
       </div>
 
-      {/* Pagination */}
-      {totalPages > 1 && (
-        <div className="flex items-center justify-between">
-          <p className="font-ui text-xs text-gray-400">
-            Page {page} of {totalPages}
-          </p>
-          <div className="flex gap-2">
-            {page > 1 && (
-              <Link
-                href={`/admin/events?page=${page - 1}${status ? `&status=${status}` : ""}`}
-                className="rounded-pill border border-gray-200 bg-white px-4 py-1.5 font-ui text-xs text-gray-600 hover:border-brand-gold"
-              >
-                &larr; Prev
-              </Link>
-            )}
-            {page < totalPages && (
-              <Link
-                href={`/admin/events?page=${page + 1}${status ? `&status=${status}` : ""}`}
-                className="rounded-pill border border-gray-200 bg-white px-4 py-1.5 font-ui text-xs text-gray-600 hover:border-brand-gold"
-              >
-                Next &rarr;
-              </Link>
-            )}
-          </div>
+      {events.length === 0 && (
+        <div className="rounded-brand border border-gray-100 bg-white px-5 py-12 text-center">
+          <p className="font-accent text-sm italic text-gray-400">No events found. Run the seed to populate data.</p>
         </div>
       )}
     </div>

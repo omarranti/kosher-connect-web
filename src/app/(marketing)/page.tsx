@@ -1,19 +1,19 @@
 import { HeroSection } from "@/components/marketing/hero";
 import { FeaturesSection } from "@/components/marketing/features";
-import { AppShowcase } from "@/components/marketing/app-showcase";
-import { TestimonialsSection } from "@/components/marketing/testimonials";
+import { QuoteStrip } from "@/components/marketing/quote-strip";
+import { HowItWorks } from "@/components/marketing/how-it-works";
 import { PricingPreview } from "@/components/marketing/pricing-preview";
-import { CtaSection } from "@/components/marketing/cta-section";
+import { WaitlistSection } from "@/components/marketing/waitlist-section";
 
 export default function HomePage() {
   return (
     <>
       <HeroSection />
       <FeaturesSection />
-      <AppShowcase />
-      <TestimonialsSection />
+      <QuoteStrip />
+      <HowItWorks />
       <PricingPreview />
-      <CtaSection />
+      <WaitlistSection />
     </>
   );
 }

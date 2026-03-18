@@ -1,68 +1,46 @@
-import { prisma } from "@/lib/db";
 import Link from "next/link";
+import { prisma } from "@/lib/db";
 
 export const dynamic = "force-dynamic";
-
-const TYPE_LABELS: Record<string, string> = {
-  RESTAURANT: "Restaurant",
-  CAFE: "Cafe",
-  BAKERY: "Bakery",
-  BUTCHER: "Butcher",
-  GROCERY: "Grocery",
-  CATERER: "Caterer",
-  FOOD_TRUCK: "Food Truck",
-  WHOLESALE: "Wholesale",
-  VENUE: "Venue",
-  PHOTOGRAPHER: "Photographer",
-  DJ: "DJ",
-  DECORATOR: "Decorator",
-  PLANNER: "Planner",
-  WORKSHOP: "Workshop",
-  OTHER: "Other",
-};
 
 export default async function ListingsPage({
   searchParams,
 }: {
-  searchParams: Promise<{ type?: string; status?: string; city?: string; page?: string }>;
+  searchParams: Promise<{ type?: string }>;
 }) {
   const params = await searchParams;
-  const type = params.type;
-  const status = params.status;
-  const city = params.city;
-  const page = parseInt(params.page ?? "1", 10);
-  const limit = 25;
+  const typeFilter = params.type?.toUpperCase();
 
-  const where: Record<string, unknown> = {};
-  if (type) where.type = type;
-  if (status) where.status = status;
-  if (city) where.city = city;
+  const listings = await prisma.listing.findMany({
+    where: typeFilter ? { type: typeFilter as any } : undefined,
+    orderBy: { createdAt: "desc" },
+    select: {
+      id: true,
+      name: true,
+      type: true,
+      city: true,
+      state: true,
+      status: true,
+      rating: true,
+      kosherCertifier: true,
+      phone: true,
+    },
+  });
 
-  const [listings, total, types, cities] = await Promise.all([
-    prisma.listing.findMany({
-      where,
-      orderBy: { name: "asc" },
-      skip: (page - 1) * limit,
-      take: limit,
-      select: {
-        id: true,
-        name: true,
-        type: true,
-        status: true,
-        city: true,
-        state: true,
-        phone: true,
-        kosherCertifier: true,
-        kosherStatus: true,
-        rating: true,
-      },
-    }),
-    prisma.listing.count({ where }),
-    prisma.listing.groupBy({ by: ["type"], _count: { id: true }, orderBy: { _count: { id: "desc" } } }),
-    prisma.listing.groupBy({ by: ["city"], _count: { id: true }, orderBy: { _count: { id: "desc" } }, take: 12 }),
-  ]);
+  const typeCounts = await prisma.listing.groupBy({
+    by: ["type"],
+    _count: { id: true },
+    orderBy: { _count: { id: "desc" } },
+  });
 
-  const totalPages = Math.ceil(total / limit);
+  const filterTypes = [
+    { label: "All", value: "", count: listings.length },
+    ...typeCounts.map((t) => ({
+      label: t.type.charAt(0) + t.type.slice(1).toLowerCase(),
+      value: t.type,
+      count: t._count.id,
+    })),
+  ];
 
   return (
     <div className="space-y-6">
@@ -70,7 +48,7 @@ export default async function ListingsPage({
         <div>
           <h1 className="font-display text-2xl font-bold text-brand-navy">Listings</h1>
           <p className="font-accent text-sm italic text-gray-500">
-            {total} kosher restaurants, vendors, workshops, and markets.
+            {listings.length} kosher restaurants, vendors, workshops, and markets.
           </p>
         </div>
         <Link href="/admin/listings/new" className="btn-burgundy text-xs">
@@ -78,34 +56,19 @@ export default async function ListingsPage({
         </Link>
       </div>
 
-      {/* Type Filters */}
+      {/* Filters */}
       <div className="flex flex-wrap gap-2">
-        <Link
-          href="/admin/listings"
-          className={`rounded-pill border px-4 py-1.5 font-ui text-xs transition-colors ${!type ? "border-brand-gold bg-brand-gold-pale text-brand-navy font-medium" : "border-gray-200 bg-white text-gray-600 hover:border-brand-gold hover:text-brand-navy"}`}
-        >
-          All ({total})
-        </Link>
-        {types.map((t) => (
+        {filterTypes.map((filter) => (
           <Link
-            key={t.type}
-            href={`/admin/listings?type=${t.type}${status ? `&status=${status}` : ""}${city ? `&city=${city}` : ""}`}
-            className={`rounded-pill border px-4 py-1.5 font-ui text-xs transition-colors ${type === t.type ? "border-brand-gold bg-brand-gold-pale text-brand-navy font-medium" : "border-gray-200 bg-white text-gray-600 hover:border-brand-gold hover:text-brand-navy"}`}
+            key={filter.label}
+            href={filter.value ? `/admin/listings?type=${filter.value}` : "/admin/listings"}
+            className={`rounded-pill border px-4 py-1.5 font-ui text-xs transition-colors ${
+              (typeFilter === filter.value) || (!typeFilter && !filter.value)
+                ? "border-brand-gold bg-brand-gold-pale text-brand-navy font-medium"
+                : "border-gray-200 bg-white text-gray-600 hover:border-brand-gold hover:text-brand-navy"
+            }`}
           >
-            {TYPE_LABELS[t.type] ?? t.type} ({t._count.id})
-          </Link>
-        ))}
-      </div>
-
-      {/* City Filters */}
-      <div className="flex flex-wrap gap-2">
-        {cities.map((c) => (
-          <Link
-            key={c.city}
-            href={`/admin/listings?city=${encodeURIComponent(c.city)}${type ? `&type=${type}` : ""}${status ? `&status=${status}` : ""}`}
-            className={`rounded-pill border px-3 py-1 font-ui text-xs transition-colors ${city === c.city ? "border-brand-gold bg-brand-gold-pale text-brand-navy font-medium" : "border-gray-200 bg-white text-gray-500 hover:border-brand-gold hover:text-brand-navy"}`}
-          >
-            {c.city} ({c._count.id})
+            {filter.label} ({filter.count})
           </Link>
         ))}
       </div>
@@ -120,68 +83,55 @@ export default async function ListingsPage({
               <th className="px-5 py-3 text-left font-ui text-xs font-medium uppercase tracking-wider text-gray-400">City</th>
               <th className="px-5 py-3 text-left font-ui text-xs font-medium uppercase tracking-wider text-gray-400">Certification</th>
               <th className="px-5 py-3 text-left font-ui text-xs font-medium uppercase tracking-wider text-gray-400">Status</th>
-              <th className="px-5 py-3 text-left font-ui text-xs font-medium uppercase tracking-wider text-gray-400">Phone</th>
+              <th className="px-5 py-3 text-left font-ui text-xs font-medium uppercase tracking-wider text-gray-400">Rating</th>
               <th className="px-5 py-3" />
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-50">
             {listings.map((listing) => (
               <tr key={listing.id} className="transition-colors hover:bg-gray-50/50">
-                <td className="px-5 py-4 font-display text-sm font-semibold text-brand-navy">{listing.name}</td>
                 <td className="px-5 py-4">
-                  <span className="tag-brand bg-brand-gold-pale text-brand-navy">{TYPE_LABELS[listing.type] ?? listing.type}</span>
+                  <p className="font-display text-sm font-semibold text-brand-navy">{listing.name}</p>
+                  {listing.phone && <p className="font-ui text-[11px] text-gray-400">{listing.phone}</p>}
+                </td>
+                <td className="px-5 py-4">
+                  <span className="rounded-pill bg-brand-gold-pale px-2.5 py-0.5 font-ui text-[11px] font-medium text-brand-navy">
+                    {listing.type}
+                  </span>
                 </td>
                 <td className="px-5 py-4 font-ui text-sm text-gray-500">{listing.city}, {listing.state}</td>
-                <td className="px-5 py-4">
-                  {listing.kosherStatus ? (
-                    <span className="tag-brand bg-semantic-green-soft text-semantic-green">{listing.kosherCertifier}</span>
-                  ) : (
-                    <span className="font-ui text-xs text-gray-400">—</span>
-                  )}
+                <td className="px-5 py-4 font-ui text-sm text-gray-500">
+                  {listing.kosherCertifier !== "NONE" ? listing.kosherCertifier : "—"}
                 </td>
                 <td className="px-5 py-4">
-                  <span className={`tag-brand ${listing.status === "ACTIVE" ? "bg-semantic-green-soft text-semantic-green" : listing.status === "PENDING" ? "bg-orange-50 text-orange-500" : "bg-gray-100 text-gray-500"}`}>
+                  <span className={`rounded-pill px-2.5 py-0.5 font-ui text-[11px] font-medium ${
+                    listing.status === "ACTIVE"
+                      ? "bg-semantic-green-soft text-semantic-green"
+                      : listing.status === "PENDING"
+                      ? "bg-orange-50 text-orange-500"
+                      : "bg-gray-100 text-gray-500"
+                  }`}>
                     {listing.status}
                   </span>
                 </td>
-                <td className="px-5 py-4 font-ui text-sm text-gray-500">{listing.phone ?? "—"}</td>
+                <td className="px-5 py-4 font-ui text-sm text-gray-600">
+                  {listing.rating ? `★ ${listing.rating.toFixed(1)}` : "—"}
+                </td>
                 <td className="px-5 py-4 text-right">
                   <Link href={`/admin/listings/${listing.id}`} className="font-ui text-xs font-medium text-brand-gold hover:text-brand-navy transition-colors">
-                    Edit &rarr;
+                    Edit →
                   </Link>
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
-      </div>
-
-      {/* Pagination */}
-      {totalPages > 1 && (
-        <div className="flex items-center justify-between">
-          <p className="font-ui text-xs text-gray-400">
-            Showing {(page - 1) * limit + 1}–{Math.min(page * limit, total)} of {total}
-          </p>
-          <div className="flex gap-2">
-            {page > 1 && (
-              <Link
-                href={`/admin/listings?page=${page - 1}${type ? `&type=${type}` : ""}${status ? `&status=${status}` : ""}${city ? `&city=${city}` : ""}`}
-                className="rounded-pill border border-gray-200 bg-white px-4 py-1.5 font-ui text-xs text-gray-600 hover:border-brand-gold"
-              >
-                &larr; Prev
-              </Link>
-            )}
-            {page < totalPages && (
-              <Link
-                href={`/admin/listings?page=${page + 1}${type ? `&type=${type}` : ""}${status ? `&status=${status}` : ""}${city ? `&city=${city}` : ""}`}
-                className="rounded-pill border border-gray-200 bg-white px-4 py-1.5 font-ui text-xs text-gray-600 hover:border-brand-gold"
-              >
-                Next &rarr;
-              </Link>
-            )}
+        {listings.length === 0 && (
+          <div className="px-5 py-12 text-center">
+            <p className="font-accent text-sm italic text-gray-400">No listings found. Run the seed to populate data.</p>
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 }
