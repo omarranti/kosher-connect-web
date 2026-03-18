@@ -1,3 +1,5 @@
+import { HeroEmailSignup } from "./hero-email-signup";
+
 export function HeroSection() {
   return (
     <section className="relative min-h-screen overflow-hidden bg-brand-cream py-24 sm:py-32 md:py-0">
@@ -47,16 +49,9 @@ export function HeroSection() {
             Here&apos;s what&apos;s popping in your neighborhood. Kosher spots, events, daily nudges, and your people — one tap away.
           </p>
 
-          <div className="mt-10 flex flex-wrap justify-center gap-3 md:justify-start">
-            <a
-              href="#waitlist"
-              className="group relative inline-flex items-center gap-2 overflow-hidden rounded-pill bg-gradient-to-r from-brand-gold to-brand-gold-light px-8 py-4 font-ui text-sm font-medium uppercase tracking-wider text-brand-navy shadow-gold transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg"
-            >
-              {/* Shimmer overlay */}
-              <span className="absolute inset-0 animate-shimmer bg-gradient-to-r from-transparent via-white/25 to-transparent" style={{ backgroundSize: '200% 100%' }} />
-              <span className="relative">Try 7 Days Free</span>
-              <svg className="relative" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M12 5l7 7-7 7" /></svg>
-            </a>
+          <HeroEmailSignup />
+
+          <div className="mt-6 flex flex-wrap justify-center gap-3 md:justify-start">
             <a href="#features" className="btn-outline px-8 py-4">
               See What&apos;s Inside
             </a>

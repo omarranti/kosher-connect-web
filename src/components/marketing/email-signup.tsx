@@ -19,7 +19,7 @@ export function EmailSignup() {
   }
 
   return (
-    <section className="relative border-y border-brand-sand/40 bg-brand-parchment py-16 sm:py-20">
+    <section id="signup" className="relative border-y border-brand-sand/40 bg-brand-parchment py-16 sm:py-20">
       {/* Decorative gradient lines */}
       <div className="pointer-events-none absolute left-0 right-0 top-0 h-px bg-gradient-to-r from-transparent via-brand-gold/20 to-transparent" />
       <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-brand-gold/20 to-transparent" />
