@@ -3,7 +3,6 @@ import bcrypt from "bcryptjs";
 
 const prisma = new PrismaClient();
 
-// Default admin password (change after first login). Document in .env.example.
 const ADMIN_DEFAULT_PASSWORD = process.env.ADMIN_DEFAULT_PASSWORD ?? "KosherConnect2025!";
 
 function slug(name: string, city: string): string {

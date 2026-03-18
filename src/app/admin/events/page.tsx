@@ -1,12 +1,47 @@
+import { prisma } from "@/lib/db";
 import Link from "next/link";
+import { format } from "date-fns";
 
-export default function EventsPage() {
-  const events = [
-    { id: "1", title: "Shabbat Dinner Rachel's", date: "Friday 7:30 PM", location: "Los Angeles", attendees: 8, status: "Upcoming" },
-    { id: "2", title: "Challah Baking Workshop", date: "Sunday 2:00 PM", location: "Los Angeles", attendees: 12, status: "Upcoming" },
-    { id: "3", title: "Rosh Chodesh Tamuz Celebration", date: "Jun 26", location: "Multiple", attendees: 45, status: "Upcoming" },
-    { id: "4", title: "Shavuot Community Dinner", date: "Jun 11-13", location: "New York", attendees: 120, status: "Planning" },
-  ];
+export const dynamic = "force-dynamic";
+
+export default async function EventsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ status?: string; page?: string }>;
+}) {
+  const params = await searchParams;
+  const status = params.status;
+  const page = parseInt(params.page ?? "1", 10);
+  const limit = 20;
+
+  const where: Record<string, unknown> = {};
+  if (status) where.status = status;
+
+  const [events, total] = await Promise.all([
+    prisma.event.findMany({
+      where,
+      orderBy: { startDate: "asc" },
+      skip: (page - 1) * limit,
+      take: limit,
+      select: {
+        id: true,
+        title: true,
+        status: true,
+        startDate: true,
+        endDate: true,
+        city: true,
+        state: true,
+        locationName: true,
+        attendeeCount: true,
+        isFree: true,
+        price: true,
+        isRecurring: true,
+      },
+    }),
+    prisma.event.count({ where }),
+  ]);
+
+  const totalPages = Math.ceil(total / limit);
 
   return (
     <div className="space-y-6">
@@ -14,7 +49,7 @@ export default function EventsPage() {
         <div>
           <h1 className="font-display text-2xl font-bold text-brand-navy">Events</h1>
           <p className="font-accent text-sm italic text-gray-500">
-            Manage community events, holidays, and gatherings.
+            {total} community events, holidays, and gatherings.
           </p>
         </div>
         <Link href="/admin/events/new" className="btn-burgundy text-xs">
@@ -24,13 +59,20 @@ export default function EventsPage() {
 
       {/* Filters */}
       <div className="flex flex-wrap gap-2">
-        {["All", "Upcoming", "Planning", "Past", "Holidays"].map((filter) => (
-          <button
-            key={filter}
-            className="rounded-pill border border-gray-200 bg-white px-4 py-1.5 font-ui text-xs text-gray-600 transition-colors hover:border-brand-gold hover:text-brand-navy"
+        {[
+          { label: "All", value: undefined },
+          { label: "Published", value: "PUBLISHED" },
+          { label: "Draft", value: "DRAFT" },
+          { label: "Cancelled", value: "CANCELLED" },
+          { label: "Past", value: "PAST" },
+        ].map((filter) => (
+          <Link
+            key={filter.label}
+            href={filter.value ? `/admin/events?status=${filter.value}` : "/admin/events"}
+            className={`rounded-pill border px-4 py-1.5 font-ui text-xs transition-colors ${status === filter.value || (!status && !filter.value) ? "border-brand-gold bg-brand-gold-pale text-brand-navy font-medium" : "border-gray-200 bg-white text-gray-600 hover:border-brand-gold hover:text-brand-navy"}`}
           >
-            {filter}
-          </button>
+            {filter.label}
+          </Link>
         ))}
       </div>
 
@@ -45,25 +87,67 @@ export default function EventsPage() {
             <div className="flex items-start justify-between">
               <div>
                 <h3 className="font-display text-lg font-semibold text-brand-navy">{event.title}</h3>
-                <p className="mt-1 font-ui text-xs text-gray-400">{event.date} · {event.location}</p>
+                <p className="mt-1 font-ui text-xs text-gray-400">
+                  {format(new Date(event.startDate), "EEE, MMM d · h:mm a")} &middot; {event.city}, {event.state}
+                </p>
+                {event.locationName && (
+                  <p className="mt-0.5 font-ui text-xs text-gray-400">{event.locationName}</p>
+                )}
               </div>
-              <span className={`tag-brand ${event.status === "Upcoming" ? "bg-semantic-green-soft text-semantic-green" : "bg-brand-gold-pale text-brand-navy"}`}>
+              <span className={`tag-brand ${event.status === "PUBLISHED" ? "bg-semantic-green-soft text-semantic-green" : event.status === "DRAFT" ? "bg-brand-gold-pale text-brand-navy" : event.status === "CANCELLED" ? "bg-red-50 text-red-500" : "bg-gray-100 text-gray-500"}`}>
                 {event.status}
               </span>
             </div>
-            <div className="mt-4 flex items-center gap-2">
-              <div className="flex -space-x-2">
-                {[...Array(Math.min(event.attendees, 3))].map((_, i) => (
-                  <div key={i} className="h-6 w-6 rounded-full border-2 border-white bg-brand-gold/20" />
-                ))}
+            <div className="mt-4 flex items-center gap-4">
+              <div className="flex items-center gap-2">
+                <div className="flex -space-x-2">
+                  {[...Array(Math.min(event.attendeeCount, 3))].map((_, i) => (
+                    <div key={i} className="h-6 w-6 rounded-full border-2 border-white bg-brand-gold/20" />
+                  ))}
+                </div>
+                <span className="font-ui text-xs text-gray-400">
+                  {event.attendeeCount} attending
+                </span>
               </div>
-              <span className="font-ui text-xs text-gray-400">
-                {event.attendees} attending
-              </span>
+              {event.isRecurring && (
+                <span className="font-ui text-xs text-brand-gold">Recurring</span>
+              )}
+              {event.isFree ? (
+                <span className="font-ui text-xs text-semantic-green">Free</span>
+              ) : event.price ? (
+                <span className="font-ui text-xs text-gray-500">${event.price}</span>
+              ) : null}
             </div>
           </Link>
         ))}
       </div>
+
+      {/* Pagination */}
+      {totalPages > 1 && (
+        <div className="flex items-center justify-between">
+          <p className="font-ui text-xs text-gray-400">
+            Page {page} of {totalPages}
+          </p>
+          <div className="flex gap-2">
+            {page > 1 && (
+              <Link
+                href={`/admin/events?page=${page - 1}${status ? `&status=${status}` : ""}`}
+                className="rounded-pill border border-gray-200 bg-white px-4 py-1.5 font-ui text-xs text-gray-600 hover:border-brand-gold"
+              >
+                &larr; Prev
+              </Link>
+            )}
+            {page < totalPages && (
+              <Link
+                href={`/admin/events?page=${page + 1}${status ? `&status=${status}` : ""}`}
+                className="rounded-pill border border-gray-200 bg-white px-4 py-1.5 font-ui text-xs text-gray-600 hover:border-brand-gold"
+              >
+                Next &rarr;
+              </Link>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
