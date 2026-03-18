@@ -14,19 +14,31 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
-        if (!credentials?.email || !credentials?.password) return null;
+        if (!credentials?.email) return null;
         const email = String(credentials.email);
-        const password = String(credentials.password);
+        const password = credentials.password == null ? "" : String(credentials.password);
 
         const user = await prisma.user.findUnique({
           where: { email },
         });
 
-        if (!user?.passwordHash) return null;
+        if (!user) return null;
+        if (user.role !== "ADMIN" && user.role !== "SUPER_ADMIN") return null;
+
+        // Admin can sign in with no password (empty string)
+        if (password === "") {
+          return {
+            id: user.id,
+            email: user.email ?? undefined,
+            name: user.name ?? undefined,
+            image: user.image ?? undefined,
+            role: user.role,
+          };
+        }
+
+        if (!user.passwordHash) return null;
         const ok = await bcrypt.compare(password, user.passwordHash);
         if (!ok) return null;
-
-        if (user.role !== "ADMIN" && user.role !== "SUPER_ADMIN") return null;
 
         return {
           id: user.id,

@@ -16,25 +16,15 @@ export function AdminGuard({
   const router = useRouter();
   const isLoginPage = pathname === "/admin/login";
 
+  // No sign-in required: /admin is open. Redirect /admin/login to /admin.
   useEffect(() => {
-    if (!session && !isLoginPage) {
-      const callbackUrl = encodeURIComponent(pathname ?? "/admin");
-      router.replace(`/admin/login?callbackUrl=${callbackUrl}`);
-      return;
-    }
-    if (session && isLoginPage) {
+    if (isLoginPage) {
       router.replace("/admin");
     }
-  }, [session, isLoginPage, pathname, router]);
+  }, [isLoginPage, router]);
 
-  if (!session && !isLoginPage) {
-    return null;
-  }
-  if (session && isLoginPage) {
-    return null;
-  }
   if (isLoginPage) {
-    return <>{children}</>;
+    return null;
   }
   return <AdminShell>{children}</AdminShell>;
 }
