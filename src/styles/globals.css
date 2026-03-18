@@ -1,0 +1,96 @@
+@import url('https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,700&family=Crimson+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Josefin+Sans:wght@200;300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Brand tokens as CSS custom properties (for non-Tailwind usage) */
+    --color-navy: #1B3A5C;
+    --color-navy-deep: #122840;
+    --color-navy-light: #2A4F75;
+    --color-gold: #C5A55A;
+    --color-gold-light: #D4B86A;
+    --color-gold-pale: #F0E4C8;
+    --color-burgundy: #8B2252;
+    --color-burgundy-light: #A83068;
+    --color-cream: #FDF6EC;
+    --color-cream-deep: #F5E6D0;
+    --color-sand: #EDE0CF;
+    --color-parchment: #F8F0E3;
+    --color-red: #C4384B;
+    --color-green: #4A9B6E;
+
+    --font-display: 'Bodoni Moda', serif;
+    --font-accent: 'Crimson Pro', serif;
+    --font-ui: 'Josefin Sans', sans-serif;
+
+    --radius-brand: 20px;
+    --radius-brand-sm: 16px;
+    --radius-pill: 100px;
+  }
+
+  body {
+    @apply bg-brand-cream text-gray-900 font-ui antialiased;
+  }
+
+  h1, h2, h3 {
+    @apply font-display text-brand-navy;
+  }
+
+  p, li {
+    @apply font-accent;
+  }
+}
+
+@layer components {
+  /* ═══════ BUTTONS ═══════ */
+  .btn-primary {
+    @apply px-8 py-3.5 rounded-pill font-ui font-medium text-sm uppercase tracking-wider
+           bg-brand-burgundy text-white
+           hover:bg-brand-burgundy-light hover:-translate-y-0.5 hover:shadow-button
+           transition-all duration-300 ease-brand-ease;
+  }
+
+  .btn-secondary {
+    @apply px-8 py-3.5 rounded-pill font-ui font-medium text-sm uppercase tracking-wider
+           bg-brand-navy text-white
+           hover:bg-brand-navy-light hover:-translate-y-0.5
+           transition-all duration-300 ease-brand-ease;
+  }
+
+  .btn-gold {
+    @apply px-8 py-3.5 rounded-pill font-ui font-medium text-sm uppercase tracking-wider
+           bg-gradient-to-r from-brand-gold to-brand-gold-light text-brand-navy
+           hover:-translate-y-0.5 hover:shadow-gold
+           transition-all duration-300 ease-brand-ease;
+  }
+
+  .btn-outline {
+    @apply px-8 py-3.5 rounded-pill font-ui font-medium text-sm uppercase tracking-wider
+           border-[1.5px] border-brand-navy text-brand-navy bg-transparent
+           hover:bg-brand-navy hover:text-white
+           transition-all duration-300 ease-brand-ease;
+  }
+
+  .btn-ghost {
+    @apply px-5 py-2 rounded-pill font-ui font-medium text-xs uppercase tracking-wide
+           bg-brand-gold-pale text-brand-navy
+           hover:bg-brand-gold-shimmer
+           transition-all duration-300 ease-brand-ease;
+  }
+
+  /* ═══════ CARDS ═══════ */
+  .card {
+    @apply bg-white rounded-brand border border-black/[0.04]
+           shadow-card hover:shadow-card-hover hover:-translate-y-1.5
+           transition-all duration-300 ease-brand-ease;
+  }
+
+  /* ═══════ TAGS ═══════ */
+  .tag {
+    @apply inline-flex items-center gap-1 px-3.5 py-1 rounded-pill
+           font-ui text-[11px] font-medium tracking-wide;
+  }
+}
