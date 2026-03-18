@@ -40,6 +40,8 @@
     @apply bg-brand-cream text-gray-900 font-ui antialiased;
     min-width: 0;
     overflow-x: hidden;
+    /* Fallback so background always shows (e.g. production build) */
+    background-color: var(--color-cream);
   }
 
   /* iOS safe area (notch/home indicator) — use with px-* for base padding */
@@ -105,5 +107,32 @@
   .tag {
     @apply inline-flex items-center gap-1 px-3.5 py-1 rounded-pill
            font-ui text-[11px] font-medium tracking-wide;
+  }
+
+  /* Burgundy CTA (hero, nav, CTAs) */
+  .btn-burgundy {
+    @apply inline-flex items-center justify-center rounded-pill px-6 py-3
+           font-ui font-medium text-sm uppercase tracking-wider text-white
+           bg-brand-burgundy hover:bg-brand-burgundy-light
+           hover:-translate-y-0.5 hover:shadow-button
+           transition-all duration-300 ease-brand-ease;
+  }
+
+  /* Ghost on dark (hero secondary) */
+  .btn-brand {
+    @apply inline-flex items-center justify-center rounded-pill px-6 py-3
+           font-ui font-medium text-sm uppercase tracking-wider
+           transition-all duration-300 ease-brand-ease;
+  }
+
+  /* Section typography (marketing pages) */
+  .section-eyebrow {
+    @apply font-ui text-xs font-light uppercase tracking-[0.2em] text-brand-gold;
+  }
+  .section-title {
+    @apply font-display text-3xl font-bold text-brand-navy sm:text-4xl;
+  }
+  .section-subtitle {
+    @apply font-accent text-lg italic text-gray-600;
   }
 }

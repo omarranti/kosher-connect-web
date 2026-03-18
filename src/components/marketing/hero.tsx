@@ -1,10 +1,10 @@
 export function HeroSection() {
   return (
     <section className="relative min-w-0 overflow-hidden bg-brand-navy py-16 sm:py-24 md:py-32">
-      {/* Background effects */}
+      {/* Background effects — subtle animated orbs */}
       <div className="pointer-events-none absolute inset-0">
-        <div className="absolute left-1/4 top-1/4 h-96 w-96 rounded-full bg-brand-gold/5 blur-3xl" />
-        <div className="absolute bottom-1/4 right-1/4 h-72 w-72 rounded-full bg-brand-burgundy/5 blur-3xl" />
+        <div className="absolute left-1/4 top-1/4 h-96 w-96 rounded-full bg-brand-gold/10 blur-3xl animate-soft-breathe" />
+        <div className="absolute bottom-1/4 right-1/4 h-72 w-72 rounded-full bg-brand-burgundy/10 blur-3xl animate-soft-breathe" style={{ animationDelay: '1s' }} />
       </div>
 
       <div className="relative mx-auto min-w-0 max-w-7xl px-4 text-center sm:px-6">
