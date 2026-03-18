@@ -62,7 +62,7 @@ export function MarketingNav() {
         {/* Mobile toggle */}
         <button
           onClick={() => setMobileOpen(!mobileOpen)}
-          className="grid h-10 w-10 place-items-center rounded-brand-sm transition-colors hover:bg-brand-sand/30 md:hidden"
+          className="grid h-11 w-11 place-items-center rounded-brand-sm transition-colors hover:bg-brand-sand/30 md:hidden"
           aria-label="Toggle menu"
         >
           {mobileOpen ? <X size={22} /> : <Menu size={22} />}
@@ -71,7 +71,7 @@ export function MarketingNav() {
 
       {/* Mobile menu */}
       {mobileOpen && (
-        <div className="border-t border-brand-sand/30 bg-brand-cream/95 px-6 py-6 backdrop-blur-xl md:hidden">
+        <div className="border-t border-brand-sand/30 bg-brand-cream/95 px-5 py-6 backdrop-blur-xl md:hidden">
           <nav className="flex flex-col gap-4">
             {navLinks.map((link) => (
               <a

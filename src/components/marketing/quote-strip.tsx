@@ -25,7 +25,7 @@ export function QuoteStrip() {
         {/* Opening quote mark */}
         <span className="mb-4 block font-display text-5xl leading-none text-brand-gold/20">&ldquo;</span>
 
-        <p className="font-display text-lg font-semibold leading-relaxed text-brand-gold-pale sm:text-2xl md:text-[1.75rem] md:leading-relaxed">
+        <p className="font-display text-base font-semibold leading-relaxed text-brand-gold-pale sm:text-xl md:text-2xl lg:text-[1.75rem]">
           Even an ordinary meal can become holy when it gathers people with intention.
         </p>
 

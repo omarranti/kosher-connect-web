@@ -57,7 +57,7 @@ const features: Feature[] = [
 
 export function FeaturesSection() {
   return (
-    <section id="features" className="relative bg-brand-parchment py-16 sm:py-24 md:py-32">
+    <section id="features" className="relative overflow-hidden bg-brand-parchment py-16 sm:py-24 md:py-32">
       {/* Background accents */}
       <div className="pointer-events-none absolute left-0 top-0 h-[300px] w-[300px] -translate-x-1/2 rounded-full bg-brand-gold-pale/30 blur-[120px]" />
       <div className="pointer-events-none absolute bottom-0 right-0 h-[200px] w-[200px] translate-x-1/2 rounded-full bg-brand-burgundy/5 blur-[100px]" />

@@ -68,7 +68,7 @@ export function HowItWorks() {
               </div>
 
               <h3 className="font-display text-lg font-semibold text-brand-parchment">{s.title}</h3>
-              <p className="mx-auto mt-3 max-w-[260px] font-accent text-sm leading-relaxed text-white/40">
+              <p className="mx-auto mt-3 max-w-[240px] font-accent text-sm leading-relaxed text-white/40 sm:max-w-[260px]">
                 {s.description}
               </p>
             </div>

@@ -49,7 +49,7 @@ const plans: Plan[] = [
 
 export function PricingPreview() {
   return (
-    <section id="pricing" className="relative py-16 sm:py-24 md:py-32">
+    <section id="pricing" className="relative overflow-hidden py-16 sm:py-24 md:py-32">
       {/* Background accent */}
       <div className="pointer-events-none absolute right-0 top-1/3 h-[300px] w-[300px] translate-x-1/2 rounded-full bg-brand-gold-pale/30 blur-[120px]" />
 
@@ -132,7 +132,7 @@ export function PricingPreview() {
         <div className="mt-14 text-center">
           <a
             href="#waitlist"
-            className="group relative inline-flex items-center gap-2 overflow-hidden rounded-pill bg-brand-burgundy px-10 py-4 font-ui text-base font-medium uppercase tracking-wider text-white shadow-button transition-all duration-300 hover:-translate-y-0.5 hover:bg-brand-burgundy-light hover:shadow-lg"
+            className="group relative inline-flex items-center gap-2 overflow-hidden rounded-pill bg-brand-burgundy px-8 py-3.5 font-ui text-sm font-medium uppercase tracking-wider text-white shadow-button transition-all duration-300 hover:-translate-y-0.5 hover:bg-brand-burgundy-light hover:shadow-lg sm:px-10 sm:py-4 sm:text-base"
           >
             Try 7 Days Free
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="transition-transform duration-200 group-hover:translate-x-0.5"><path d="M5 12h14M12 5l7 7-7 7" /></svg>

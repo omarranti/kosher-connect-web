@@ -12,7 +12,7 @@ export default function MarketingLayout({
         Skip to content
       </a>
       <MarketingNav />
-      <main id="main-content">{children}</main>
+      <main id="main-content" className="overflow-x-hidden">{children}</main>
       <MarketingFooter />
     </>
   );

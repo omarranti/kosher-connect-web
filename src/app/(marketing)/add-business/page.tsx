@@ -33,7 +33,7 @@ const CERTIFIERS = [
 ] as const;
 
 const inputClass =
-  "w-full rounded-brand-sm border-[1.5px] border-brand-sand bg-brand-parchment px-4 py-3 font-ui text-sm text-brand-navy outline-none transition-all placeholder:text-brand-sand focus:border-brand-gold focus:bg-white focus:ring-2 focus:ring-brand-gold/10";
+  "w-full rounded-brand-sm border-[1.5px] border-brand-sand bg-brand-parchment px-4 py-3 font-ui text-base text-brand-navy outline-none transition-all placeholder:text-brand-sand focus:border-brand-gold focus:bg-white focus:ring-2 focus:ring-brand-gold/10 sm:text-sm";
 const labelClass = "mb-1.5 block font-ui text-xs font-semibold text-brand-navy";
 
 export default function AddBusinessPage() {
@@ -58,7 +58,7 @@ export default function AddBusinessPage() {
   }
 
   return (
-    <section className="relative overflow-hidden bg-brand-cream px-6 py-28 sm:py-32">
+    <section className="relative overflow-hidden bg-brand-cream px-5 py-20 sm:px-8 sm:py-24 md:py-32">
       {/* Background accents */}
       <div className="pointer-events-none absolute -left-32 top-0 h-[400px] w-[400px] rounded-full bg-brand-gold/5 blur-[120px]" />
       <div className="pointer-events-none absolute -right-20 bottom-0 h-[300px] w-[300px] rounded-full bg-brand-burgundy/5 blur-[100px]" />
@@ -68,7 +68,7 @@ export default function AddBusinessPage() {
           {/* Top gradient accent */}
           <div className="absolute left-0 right-0 top-0 h-1 bg-gradient-to-r from-brand-gold via-brand-burgundy to-brand-navy" />
 
-          <div className="p-8 sm:p-10">
+          <div className="p-5 sm:p-8 md:p-10">
             {!submitted ? (
               <>
                 <div className="mb-2 flex items-center gap-2">

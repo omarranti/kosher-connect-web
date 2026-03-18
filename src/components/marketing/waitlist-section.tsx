@@ -45,7 +45,7 @@ export function WaitlistSection() {
   }
 
   return (
-    <section id="waitlist" className="relative overflow-hidden bg-brand-navy px-4 py-16 sm:px-6 sm:py-28">
+    <section id="waitlist" className="relative overflow-hidden bg-brand-navy px-5 py-16 sm:px-8 sm:py-24 md:py-32">
       {/* Background accents */}
       <div className="pointer-events-none absolute -left-32 top-0 h-[400px] w-[400px] rounded-full bg-brand-gold/5 blur-[120px]" />
       <div className="pointer-events-none absolute -right-20 bottom-0 h-[300px] w-[300px] rounded-full bg-brand-burgundy/5 blur-[100px]" />
@@ -79,7 +79,7 @@ export function WaitlistSection() {
                         name="firstName"
                         required
                         placeholder="Rachel"
-                        className="w-full rounded-brand-sm border-[1.5px] border-brand-sand bg-brand-parchment px-4 py-3 font-ui text-sm text-brand-navy outline-none transition-all placeholder:text-brand-sand focus:border-brand-gold focus:bg-white focus:ring-2 focus:ring-brand-gold/10"
+                        className="w-full rounded-brand-sm border-[1.5px] border-brand-sand bg-brand-parchment px-4 py-3 font-ui text-base text-brand-navy outline-none sm:text-sm transition-all placeholder:text-brand-sand focus:border-brand-gold focus:bg-white focus:ring-2 focus:ring-brand-gold/10"
                       />
                     </div>
                     <div>
@@ -90,7 +90,7 @@ export function WaitlistSection() {
                         name="lastName"
                         required
                         placeholder="Cohen"
-                        className="w-full rounded-brand-sm border-[1.5px] border-brand-sand bg-brand-parchment px-4 py-3 font-ui text-sm text-brand-navy outline-none transition-all placeholder:text-brand-sand focus:border-brand-gold focus:bg-white focus:ring-2 focus:ring-brand-gold/10"
+                        className="w-full rounded-brand-sm border-[1.5px] border-brand-sand bg-brand-parchment px-4 py-3 font-ui text-base text-brand-navy outline-none sm:text-sm transition-all placeholder:text-brand-sand focus:border-brand-gold focus:bg-white focus:ring-2 focus:ring-brand-gold/10"
                       />
                     </div>
                   </div>
@@ -103,7 +103,7 @@ export function WaitlistSection() {
                       name="email"
                       required
                       placeholder="rachel@example.com"
-                      className="w-full rounded-brand-sm border-[1.5px] border-brand-sand bg-brand-parchment px-4 py-3 font-ui text-sm text-brand-navy outline-none transition-all placeholder:text-brand-sand focus:border-brand-gold focus:bg-white focus:ring-2 focus:ring-brand-gold/10"
+                      className="w-full rounded-brand-sm border-[1.5px] border-brand-sand bg-brand-parchment px-4 py-3 font-ui text-base text-brand-navy outline-none sm:text-sm transition-all placeholder:text-brand-sand focus:border-brand-gold focus:bg-white focus:ring-2 focus:ring-brand-gold/10"
                     />
                   </div>
 
@@ -116,7 +116,7 @@ export function WaitlistSection() {
                       type="text"
                       name="city"
                       placeholder="Los Angeles"
-                      className="w-full rounded-brand-sm border-[1.5px] border-brand-sand bg-brand-parchment px-4 py-3 font-ui text-sm text-brand-navy outline-none transition-all placeholder:text-brand-sand focus:border-brand-gold focus:bg-white focus:ring-2 focus:ring-brand-gold/10"
+                      className="w-full rounded-brand-sm border-[1.5px] border-brand-sand bg-brand-parchment px-4 py-3 font-ui text-base text-brand-navy outline-none sm:text-sm transition-all placeholder:text-brand-sand focus:border-brand-gold focus:bg-white focus:ring-2 focus:ring-brand-gold/10"
                     />
                   </div>
 
@@ -132,7 +132,7 @@ export function WaitlistSection() {
                           key={i.value}
                           type="button"
                           onClick={() => toggle(i.value)}
-                          className={`flex items-center gap-1.5 rounded-brand-sm border-[1.5px] px-3 py-2 font-ui text-xs font-semibold transition-all duration-200 ${
+                          className={`flex items-center gap-1.5 rounded-brand-sm border-[1.5px] px-3 py-2.5 font-ui text-xs font-semibold transition-all duration-200 ${
                             selected.has(i.value)
                               ? 'border-brand-gold bg-brand-gold-pale text-brand-gold'
                               : 'border-brand-sand bg-white text-brand-navy hover:border-brand-gold/50'
@@ -166,7 +166,7 @@ export function WaitlistSection() {
                       name="message"
                       rows={3}
                       placeholder="Tell us what would make this app perfect for you..."
-                      className="w-full resize-y rounded-brand-sm border-[1.5px] border-brand-sand bg-brand-parchment px-4 py-3 font-ui text-sm text-brand-navy outline-none transition-all placeholder:text-brand-sand focus:border-brand-gold focus:bg-white focus:ring-2 focus:ring-brand-gold/10"
+                      className="w-full resize-y rounded-brand-sm border-[1.5px] border-brand-sand bg-brand-parchment px-4 py-3 font-ui text-base text-brand-navy outline-none sm:text-sm transition-all placeholder:text-brand-sand focus:border-brand-gold focus:bg-white focus:ring-2 focus:ring-brand-gold/10"
                     />
                   </div>
 

@@ -30,13 +30,13 @@ export function HeroSection() {
             <span className="font-ui text-[11px] font-medium tracking-wide text-brand-navy/70">Coming soon to iOS</span>
           </div>
 
-          <h1 className="font-display text-[2.25rem] font-bold leading-[1.08] tracking-tight sm:text-5xl md:text-6xl lg:text-[4.5rem]">
+          <h1 className="font-display text-3xl font-bold leading-[1.08] tracking-tight sm:text-4xl md:text-5xl lg:text-[4.5rem]">
             <span className="text-brand-navy">What&apos;s up,</span>
             <br />
             <span className="bg-gradient-to-r from-brand-gold via-brand-gold-light to-brand-gold bg-clip-text text-transparent">friends?</span>
           </h1>
 
-          <p className="mx-auto mt-3 max-w-sm font-accent text-[15px] leading-relaxed text-brand-navy/50 sm:mt-5 sm:max-w-md sm:text-lg md:mx-0">
+          <p className="mx-auto mt-3 font-accent text-sm leading-relaxed text-brand-navy/50 sm:mt-5 sm:max-w-md sm:text-base md:mx-0 md:text-lg">
             Kosher spots, events, daily nudges, and your people — one tap away.
           </p>
 
@@ -53,7 +53,7 @@ export function HeroSection() {
               ].map((a) => (
                 <span
                   key={a.letter}
-                  className={`grid h-7 w-7 place-items-center rounded-full border-2 border-brand-cream ${a.bg} font-ui text-[9px] font-bold ${a.text} sm:h-9 sm:w-9 sm:text-[11px]`}
+                  className={`grid h-8 w-8 place-items-center rounded-full border-2 border-brand-cream ${a.bg} font-ui text-[9px] font-bold ${a.text} sm:h-9 sm:w-9 sm:text-[11px]`}
                 >
                   {a.letter}
                 </span>

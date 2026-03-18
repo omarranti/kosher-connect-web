@@ -48,11 +48,11 @@ export function HeroEmailSignup() {
         onChange={(e) => setEmail(e.target.value)}
         placeholder="your@email.com"
         aria-label="Email address"
-        className="flex-1 rounded-pill border-[1.5px] border-brand-sand bg-white/80 px-4 py-3 font-ui text-[15px] text-brand-navy outline-none transition-all placeholder:text-brand-sand focus:border-brand-gold focus:bg-white focus:ring-2 focus:ring-brand-gold/10 sm:text-sm"
+        className="flex-1 rounded-pill border-[1.5px] border-brand-sand bg-white/80 px-4 py-3 font-ui text-base text-brand-navy outline-none transition-all placeholder:text-brand-sand focus:border-brand-gold focus:bg-white focus:ring-2 focus:ring-brand-gold/10 sm:text-sm"
       />
       <button
         type="submit"
-        className="group inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-pill bg-brand-burgundy px-6 py-3 font-ui text-sm font-medium uppercase tracking-wider text-white shadow-button transition-all duration-300 hover:-translate-y-0.5 hover:bg-brand-burgundy-light hover:shadow-lg"
+        className="group inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-pill bg-brand-burgundy px-5 py-3 font-ui text-sm font-medium uppercase tracking-wider text-white shadow-button transition-all duration-300 hover:-translate-y-0.5 hover:bg-brand-burgundy-light hover:shadow-lg sm:px-6"
       >
         <span>Get Early Access</span>
         <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5" />
