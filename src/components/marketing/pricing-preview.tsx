@@ -3,26 +3,30 @@ const plans = [
     name: 'Monthly Plan',
     price: '$6.99',
     period: 'per month',
-    description: 'No charges today. Cancel anytime.',
+    savings: null,
+    description: 'No commitment. Cancel anytime during your free trial.',
     trial: true,
     featured: false,
   },
   {
-    name: 'Family Plan',
-    price: '$89.99',
-    period: 'per year · up to 4 members',
-    description: 'Invite your people. Enjoy full access together. One plan, whole family.',
+    name: 'Yearly Plan',
+    price: '$49.99',
+    period: 'per year',
+    savings: 'Save 40% vs. monthly',
+    description: 'Everything included. Full access, full year — just $4.17/mo.',
     trial: false,
     featured: true,
-    badge: 'Best Value',
+    badge: 'Most Popular',
   },
   {
-    name: 'Yearly Plan',
-    price: '$59.99',
-    period: 'per year',
-    description: 'Everything included. Full access, full year.',
+    name: 'Family Plan',
+    price: '$79.99',
+    period: 'per year · up to 4 members',
+    savings: 'Best value for families',
+    description: 'Invite your people. Full access for up to 4 family members on one plan.',
     trial: false,
     featured: false,
+    badge: 'Best for Families',
   },
 ];
 
@@ -35,7 +39,7 @@ export function PricingPreview() {
           <p className="section-eyebrow mb-3">Bring Your People. The Table Is Set.</p>
           <h2 className="section-title mb-3">We Are Waiting for You</h2>
           <p className="font-display text-base font-semibold text-brand-navy sm:text-lg">
-            Invite your people, enjoy 7 days of full access before your subscription begins
+            Every plan starts with a 7-day free trial — no charges until you decide
           </p>
         </div>
 
@@ -51,17 +55,22 @@ export function PricingPreview() {
               }`}
             >
               {plan.badge && (
-                <span className="absolute -top-3 right-4 rounded-pill bg-brand-burgundy px-3 py-1 font-ui text-[10px] font-bold uppercase tracking-wider text-white">
+                <span className={`absolute -top-3 right-4 rounded-pill px-3 py-1 font-ui text-[10px] font-bold uppercase tracking-wider text-white ${
+                  plan.featured ? 'bg-brand-burgundy' : 'bg-brand-navy'
+                }`}>
                   {plan.badge}
                 </span>
               )}
               <h4 className="font-ui text-sm font-bold text-brand-burgundy">{plan.name}</h4>
               <p className="mt-1 font-display text-3xl font-black text-brand-navy">{plan.price}</p>
               <p className="mt-1 font-ui text-xs text-brand-navy/40">{plan.period}</p>
+              {plan.savings && (
+                <p className="mt-1.5 font-ui text-xs font-semibold text-brand-gold">{plan.savings}</p>
+              )}
               <p className="mt-3 font-accent text-sm leading-relaxed text-brand-navy/50">{plan.description}</p>
               {plan.trial && (
                 <span className="mt-3 inline-block rounded-pill bg-brand-burgundy/10 px-3 py-1 font-ui text-[10px] font-bold text-brand-burgundy">
-                  7 days trial
+                  7-day free trial
                 </span>
               )}
             </div>

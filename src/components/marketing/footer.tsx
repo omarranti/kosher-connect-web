@@ -2,13 +2,12 @@ import Link from "next/link";
 
 const footerLinks = {
   product: [
-    { label: "Features", href: "/features" as const },
-    { label: "Pricing", href: "/pricing" as const },
-    { label: "Download", href: "/download" as const },
+    { label: "Features", href: "/#features" as const },
+    { label: "Pricing", href: "/#pricing" as const },
+    { label: "Join Waitlist", href: "/#waitlist" as const },
   ],
   company: [
     { label: "About", href: "/about" as const },
-    { label: "Blog", href: "/blog" as const },
     { label: "Contact", href: "/contact" as const },
   ],
   legal: [
@@ -38,10 +37,14 @@ export function MarketingFooter() {
             <p className="mt-3 max-w-[240px] font-accent text-sm leading-relaxed text-white/50">
               Your Jewish community hub. From Shabbat to simchas — find your people, one tap away.
             </p>
+            {/* Launch cities */}
+            <p className="mt-3 font-ui text-xs text-brand-gold/60">
+              Launching first in LA, NYC &amp; Miami
+            </p>
             {/* Email */}
             <a
               href="mailto:hello@kosherconnect.com"
-              className="mt-4 inline-flex items-center gap-2 font-ui text-xs text-brand-gold/80 transition-colors hover:text-brand-gold"
+              className="mt-3 inline-flex items-center gap-2 font-ui text-xs text-brand-gold/80 transition-colors hover:text-brand-gold"
             >
               <svg className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <rect width="20" height="16" x="2" y="4" rx="2" />
