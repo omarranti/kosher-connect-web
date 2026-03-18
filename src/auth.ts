@@ -26,11 +26,14 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         const ok = await bcrypt.compare(password, user.passwordHash);
         if (!ok) return null;
 
+        if (user.role !== "ADMIN" && user.role !== "SUPER_ADMIN") return null;
+
         return {
           id: user.id,
           email: user.email ?? undefined,
           name: user.name ?? undefined,
           image: user.image ?? undefined,
+          role: user.role,
         };
       },
     }),
@@ -44,6 +47,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       if (user) {
         token.id = user.id;
         token.email = user.email;
+        token.role = user.role;
       }
       return token;
     },
@@ -51,6 +55,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       if (session.user) {
         session.user.id = token.id as string;
         session.user.email = token.email as string;
+        session.user.role = token.role;
       }
       return session;
     },

@@ -22,7 +22,7 @@ export async function signInAction(formData: FormData) {
     // Re-throw Next.js redirect errors (shouldn't happen with redirect: false)
     if (isRedirectError(error)) throw error;
     // Any auth error (CredentialsSignin, etc.)
-    return { error: "Invalid email or password." };
+    return { error: "Invalid credentials or insufficient permissions." };
   }
   redirect(callbackUrl as "/admin");
 }
