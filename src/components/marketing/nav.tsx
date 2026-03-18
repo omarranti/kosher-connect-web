@@ -36,7 +36,7 @@ export function MarketingNav() {
           {navLinks.map((link) => (
             <Link
               key={link.href}
-              href={link.href}
+              href={link.href as any}
               className="font-ui text-sm font-medium tracking-wide text-brand-navy/70 transition-colors hover:text-brand-navy"
             >
               {link.label}
@@ -71,7 +71,7 @@ export function MarketingNav() {
             {navLinks.map((link) => (
               <Link
                 key={link.href}
-                href={link.href}
+                href={link.href as any}
                 onClick={() => setMobileOpen(false)}
                 className="font-ui text-base font-medium text-brand-navy"
               >

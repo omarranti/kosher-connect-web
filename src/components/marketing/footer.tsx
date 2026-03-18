@@ -57,7 +57,7 @@ export function MarketingFooter() {
                 {section.links.map((link) => (
                   <li key={link.href}>
                     <Link
-                      href={link.href}
+                      href={link.href as any}
                       className="font-ui text-sm text-white/50 transition-colors hover:text-white"
                     >
                       {link.label}

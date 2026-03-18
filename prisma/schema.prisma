@@ -1,0 +1,263 @@
+// Kosher Connect — Database Schema
+// Run: npx prisma db push / npx prisma migrate dev
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ═══════════════════════════════════════
+// AUTH
+// ═══════════════════════════════════════
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+// ═══════════════════════════════════════
+// USERS
+// ═══════════════════════════════════════
+
+enum UserRole {
+  USER
+  ADMIN
+  SUPER_ADMIN
+}
+
+enum SubscriptionPlan {
+  FREE
+  MONTHLY
+  YEARLY
+  FAMILY
+}
+
+model User {
+  id            String           @id @default(cuid())
+  name          String?
+  email         String?          @unique
+  emailVerified DateTime?
+  image         String?
+  passwordHash  String?          // for credentials login (admin)
+  role          UserRole         @default(USER)
+  plan          SubscriptionPlan @default(FREE)
+  trialEndsAt   DateTime?
+  createdAt     DateTime         @default(now())
+  updatedAt     DateTime         @updatedAt
+
+  accounts Account[]
+  sessions Session[]
+  listings Listing[]
+  events   Event[]
+
+  @@index([email])
+}
+
+// ═══════════════════════════════════════
+// LISTINGS (Restaurants, Vendors, Markets, etc.)
+// ═══════════════════════════════════════
+
+enum ListingType {
+  RESTAURANT
+  CAFE
+  BAKERY
+  BUTCHER
+  GROCERY
+  CATERER
+  FOOD_TRUCK
+  WHOLESALE
+  VENUE
+  PHOTOGRAPHER
+  DJ
+  DECORATOR
+  PLANNER
+  WORKSHOP
+  OTHER
+}
+
+enum ListingStatus {
+  DRAFT
+  PENDING
+  ACTIVE
+  PAUSED
+  CLOSED
+}
+
+enum KosherCertification {
+  NONE
+  OU
+  OK
+  RCC
+  STAR_K
+  CRC
+  OTHER
+}
+
+model Listing {
+  id          String             @id @default(cuid())
+  name        String
+  slug        String             @unique
+  description String?            @db.Text
+  type        ListingType
+  status      ListingStatus      @default(DRAFT)
+
+  // Location
+  address     String?
+  city        String
+  state       String
+  postalCode  String?
+  latitude    Float?
+  longitude   Float?
+
+  // Contact
+  phone       String?
+  email       String?
+  website     String?
+
+  // Kosher details
+  kosherStatus       Boolean              @default(false)
+  kosherCertifier    KosherCertification  @default(NONE)
+  kosherCertifierName String?
+  cholovYisroel      Boolean              @default(false)
+  pasYisroel         Boolean              @default(false)
+  yoshon             Boolean              @default(false)
+  bishulYisroel      Boolean              @default(false)
+
+  // Business
+  hours       String?            @db.Text // JSON structured hours
+  priceRange  String?            // $, $$, $$$, $$$$
+  rating      Float?
+  reviewCount Int                @default(0)
+
+  // Media
+  imageUrl    String?
+  images      String[]           // Array of image URLs
+
+  // Relationships
+  createdBy   User               @relation(fields: [createdById], references: [id])
+  createdById String
+  categories  Category[]
+  events      Event[]
+
+  // Timestamps
+  createdAt   DateTime           @default(now())
+  updatedAt   DateTime           @updatedAt
+  verifiedAt  DateTime?
+
+  // Source tracking (from scraping blueprint)
+  sourceUrl   String?
+  sourceId    String?
+  lastScraped DateTime?
+
+  @@index([city, state])
+  @@index([type, status])
+  @@index([kosherStatus])
+  @@index([slug])
+}
+
+// ═══════════════════════════════════════
+// EVENTS
+// ═══════════════════════════════════════
+
+enum EventStatus {
+  DRAFT
+  PUBLISHED
+  CANCELLED
+  PAST
+}
+
+model Event {
+  id          String      @id @default(cuid())
+  title       String
+  slug        String      @unique
+  description String?     @db.Text
+  status      EventStatus @default(DRAFT)
+
+  // Timing
+  startDate   DateTime
+  endDate     DateTime?
+  timezone    String      @default("America/Los_Angeles")
+  isRecurring Boolean     @default(false)
+  rrule       String?     // iCal RRULE format
+
+  // Location
+  locationName String?
+  address      String?
+  city         String
+  state        String
+  latitude     Float?
+  longitude    Float?
+  isVirtual    Boolean    @default(false)
+  virtualUrl   String?
+
+  // Details
+  imageUrl       String?
+  registrationUrl String?
+  maxAttendees   Int?
+  attendeeCount  Int      @default(0)
+  isFree         Boolean  @default(true)
+  price          Float?
+
+  // Relationships
+  organizer    User     @relation(fields: [organizerId], references: [id])
+  organizerId  String
+  listing      Listing? @relation(fields: [listingId], references: [id])
+  listingId    String?
+  categories   Category[]
+
+  // Timestamps
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@index([city, state])
+  @@index([startDate])
+  @@index([status])
+}
+
+// ═══════════════════════════════════════
+// CATEGORIES
+// ═══════════════════════════════════════
+
+model Category {
+  id       String    @id @default(cuid())
+  name     String    @unique
+  slug     String    @unique
+  icon     String?
+
+  listings Listing[]
+  events   Event[]
+}

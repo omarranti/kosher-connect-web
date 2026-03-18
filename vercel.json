@@ -1,0 +1,11 @@
+{
+  "framework": "nextjs",
+  "redirects": [
+    {
+      "source": "/:path*",
+      "has": [{ "type": "host", "value": "www.kosherconnect.app" }],
+      "destination": "https://kosherconnect.app/:path*",
+      "permanent": true
+    }
+  ]
+}
