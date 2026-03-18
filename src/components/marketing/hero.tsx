@@ -51,12 +51,6 @@ export function HeroSection() {
 
           <HeroEmailSignup />
 
-          <div className="mt-6 flex flex-wrap justify-center gap-3 md:justify-start">
-            <a href="#features" className="btn-outline px-8 py-4">
-              See What&apos;s Inside
-            </a>
-          </div>
-
           {/* Social proof */}
           <div className="mt-10 flex items-center justify-center gap-3 md:justify-start">
             <div className="flex -space-x-2.5">

@@ -20,11 +20,18 @@ export function HeroEmailSignup() {
 
   if (submitted) {
     return (
-      <div className="mt-8 flex items-center gap-2.5 justify-center md:justify-start">
-        <CheckCircle2 className="h-5 w-5 text-brand-gold" strokeWidth={1.5} />
-        <p className="font-ui text-sm text-brand-navy">
-          You&apos;re on the list! We&apos;ll notify you at <b>{email}</b>.
-        </p>
+      <div className="mt-8 space-y-4">
+        <div className="flex items-center gap-2.5 justify-center md:justify-start">
+          <CheckCircle2 className="h-5 w-5 text-emerald-500" strokeWidth={2} />
+          <p className="font-ui text-sm text-brand-navy">
+            You&apos;re on the list! We&apos;ll notify you at <b>{email}</b>.
+          </p>
+        </div>
+        <div className="flex flex-wrap justify-center gap-3 md:justify-start">
+          <a href="#features" className="btn-outline px-8 py-4">
+            See What&apos;s Inside
+          </a>
+        </div>
       </div>
     );
   }
@@ -45,9 +52,8 @@ export function HeroEmailSignup() {
       />
       <button
         type="submit"
-        className="group relative inline-flex items-center justify-center gap-2 overflow-hidden whitespace-nowrap rounded-pill bg-gradient-to-r from-brand-gold to-brand-gold-light px-7 py-3.5 font-ui text-sm font-medium uppercase tracking-wider text-brand-navy shadow-gold transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg"
+        className="group relative inline-flex items-center justify-center gap-2 overflow-hidden whitespace-nowrap rounded-pill bg-brand-burgundy px-7 py-3.5 font-ui text-sm font-medium uppercase tracking-wider text-white shadow-button transition-all duration-300 hover:-translate-y-0.5 hover:bg-brand-burgundy-light hover:shadow-lg"
       >
-        <span className="absolute inset-0 animate-shimmer bg-gradient-to-r from-transparent via-white/25 to-transparent" style={{ backgroundSize: "200% 100%" }} />
         <span className="relative">Get Early Access</span>
         <ArrowRight className="relative h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5" />
       </button>
