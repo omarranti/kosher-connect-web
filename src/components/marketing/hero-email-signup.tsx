@@ -20,15 +20,15 @@ export function HeroEmailSignup() {
 
   if (submitted) {
     return (
-      <div className="mt-5 space-y-3 sm:mt-8 sm:space-y-4">
-        <div className="flex items-center gap-2.5 justify-center md:justify-start">
+      <div className="mt-5 space-y-3 sm:mt-6">
+        <div className="flex items-center justify-center gap-2 md:justify-start">
           <CheckCircle2 className="h-5 w-5 text-emerald-500" strokeWidth={2} />
           <p className="font-ui text-sm text-brand-navy">
             You&apos;re on the list! We&apos;ll notify you at <b>{email}</b>.
           </p>
         </div>
-        <div className="flex flex-wrap justify-center gap-3 md:justify-start">
-          <a href="#features" className="btn-outline px-8 py-4">
+        <div className="flex justify-center md:justify-start">
+          <a href="#features" className="btn-outline px-6 py-3 text-sm sm:px-8 sm:py-4">
             See What&apos;s Inside
           </a>
         </div>
@@ -39,7 +39,7 @@ export function HeroEmailSignup() {
   return (
     <form
       onSubmit={handleSubmit}
-      className="mx-auto mt-5 flex max-w-md flex-col gap-2.5 sm:mt-8 sm:flex-row sm:gap-3 md:mx-0"
+      className="mx-auto mt-5 flex max-w-md flex-col gap-2 sm:mt-6 sm:flex-row sm:gap-3 md:mx-0"
     >
       <input
         type="email"
@@ -48,14 +48,14 @@ export function HeroEmailSignup() {
         onChange={(e) => setEmail(e.target.value)}
         placeholder="your@email.com"
         aria-label="Email address"
-        className="flex-1 rounded-pill border-[1.5px] border-brand-sand bg-white/80 px-4 py-3 font-ui text-sm text-brand-navy outline-none transition-all placeholder:text-brand-sand focus:border-brand-gold focus:bg-white focus:ring-2 focus:ring-brand-gold/10 sm:px-5 sm:py-3.5"
+        className="flex-1 rounded-pill border-[1.5px] border-brand-sand bg-white/80 px-4 py-3 font-ui text-[15px] text-brand-navy outline-none transition-all placeholder:text-brand-sand focus:border-brand-gold focus:bg-white focus:ring-2 focus:ring-brand-gold/10 sm:text-sm"
       />
       <button
         type="submit"
-        className="group relative inline-flex items-center justify-center gap-2 overflow-hidden whitespace-nowrap rounded-pill bg-brand-burgundy px-6 py-3 font-ui text-sm font-medium uppercase tracking-wider text-white shadow-button transition-all duration-300 hover:-translate-y-0.5 hover:bg-brand-burgundy-light hover:shadow-lg sm:px-7 sm:py-3.5"
+        className="group inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-pill bg-brand-burgundy px-6 py-3 font-ui text-sm font-medium uppercase tracking-wider text-white shadow-button transition-all duration-300 hover:-translate-y-0.5 hover:bg-brand-burgundy-light hover:shadow-lg"
       >
-        <span className="relative">Get Early Access</span>
-        <ArrowRight className="relative h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5" />
+        <span>Get Early Access</span>
+        <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5" />
       </button>
     </form>
   );

@@ -1,6 +1,6 @@
 export function QuoteStrip() {
   return (
-    <div className="relative overflow-hidden bg-brand-navy px-6 py-20 sm:py-24 text-center">
+    <div className="relative overflow-hidden bg-brand-navy px-5 py-14 text-center sm:px-8 sm:py-24">
       {/* Layered background effects */}
       <div className="pointer-events-none absolute left-1/2 top-1/2 h-[400px] w-[600px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-brand-gold/5 blur-[100px]" />
       {/* Subtle star pattern */}
@@ -25,7 +25,7 @@ export function QuoteStrip() {
         {/* Opening quote mark */}
         <span className="mb-4 block font-display text-5xl leading-none text-brand-gold/20">&ldquo;</span>
 
-        <p className="font-display text-xl font-semibold leading-relaxed text-brand-gold-pale sm:text-2xl md:text-[1.75rem] md:leading-relaxed">
+        <p className="font-display text-lg font-semibold leading-relaxed text-brand-gold-pale sm:text-2xl md:text-[1.75rem] md:leading-relaxed">
           Even an ordinary meal can become holy when it gathers people with intention.
         </p>
 

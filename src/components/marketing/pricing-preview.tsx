@@ -49,11 +49,11 @@ const plans: Plan[] = [
 
 export function PricingPreview() {
   return (
-    <section id="pricing" className="relative py-24 sm:py-32">
+    <section id="pricing" className="relative py-16 sm:py-24 md:py-32">
       {/* Background accent */}
       <div className="pointer-events-none absolute right-0 top-1/3 h-[300px] w-[300px] translate-x-1/2 rounded-full bg-brand-gold-pale/30 blur-[120px]" />
 
-      <div className="relative mx-auto max-w-5xl px-6">
+      <div className="relative mx-auto max-w-5xl px-5 sm:px-8">
         {/* Header */}
         <div className="text-center">
           <p className="section-eyebrow mb-3">Bring Your People. The Table Is Set.</p>
@@ -64,23 +64,23 @@ export function PricingPreview() {
         </div>
 
         {/* Cards */}
-        <div className="mt-14 grid gap-6 sm:grid-cols-3">
+        <div className="mt-10 grid gap-5 sm:mt-14 sm:grid-cols-3 sm:gap-6">
           {plans.map((plan) => (
             <div
               key={plan.name}
-              className={`relative overflow-hidden rounded-brand bg-white p-8 shadow-card transition-all duration-300 hover:-translate-y-1.5 hover:shadow-card-hover ${
+              className={`relative rounded-brand bg-white p-5 shadow-card transition-all duration-300 hover:-translate-y-1.5 hover:shadow-card-hover sm:p-8 ${
                 plan.featured
-                  ? 'border-2 border-brand-burgundy ring-4 ring-brand-burgundy/5 sm:-mt-3 sm:mb-[-12px] sm:pb-10'
+                  ? 'border-2 border-brand-burgundy ring-4 ring-brand-burgundy/5 sm:-mt-4 sm:pb-10'
                   : 'border border-brand-sand/60'
               }`}
             >
               {/* Featured plan top gradient */}
               {plan.featured && (
-                <div className="absolute left-0 right-0 top-0 h-1 bg-gradient-to-r from-brand-burgundy via-brand-gold to-brand-burgundy" />
+                <div className="absolute left-0 right-0 top-0 h-1 rounded-t-brand bg-gradient-to-r from-brand-burgundy via-brand-gold to-brand-burgundy" />
               )}
 
               {plan.badge && (
-                <span className={`absolute -top-3.5 right-5 inline-flex items-center gap-1.5 rounded-pill px-4 py-1.5 font-ui text-[10px] font-bold uppercase tracking-wider text-white shadow-sm ${
+                <span className={`absolute -top-3.5 right-5 z-10 inline-flex items-center gap-1.5 rounded-pill px-4 py-1.5 font-ui text-[10px] font-bold uppercase tracking-wider text-white shadow-sm ${
                   plan.featured ? 'bg-brand-burgundy shadow-button/20' : 'bg-brand-navy'
                 }`}>
                   {plan.featured && <Star className="h-3 w-3 fill-current" />}

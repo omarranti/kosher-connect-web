@@ -24,7 +24,7 @@ export function MarketingFooter() {
       {/* Decorative gold gradient line */}
       <div className="absolute left-0 right-0 top-0 h-px bg-gradient-to-r from-transparent via-brand-gold/30 to-transparent" />
 
-      <div className="mx-auto max-w-6xl px-6 pb-8 pt-16">
+      <div className="mx-auto max-w-6xl px-5 pb-8 pt-12 sm:px-8 sm:pt-16">
         {/* Top section: brand + columns */}
         <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
           {/* Brand column */}

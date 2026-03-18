@@ -31,12 +31,12 @@ const steps: Step[] = [
 
 export function HowItWorks() {
   return (
-    <section className="relative overflow-hidden bg-brand-navy py-24 sm:py-32">
+    <section className="relative overflow-hidden bg-brand-navy py-16 sm:py-24 md:py-32">
       {/* Background accents */}
       <div className="pointer-events-none absolute -right-40 -top-48 h-[500px] w-[500px] rounded-full bg-brand-gold/8 blur-[120px]" />
       <div className="pointer-events-none absolute -left-20 bottom-0 h-[300px] w-[300px] rounded-full bg-brand-burgundy/5 blur-[100px]" />
 
-      <div className="relative mx-auto max-w-5xl px-6 text-center">
+      <div className="relative mx-auto max-w-5xl px-5 text-center sm:px-8">
         <p className="section-eyebrow mb-3 !text-brand-gold">How It Works</p>
         <h2 className="font-display text-3xl font-bold text-brand-parchment sm:text-4xl md:text-5xl">
           Three Steps to
@@ -44,7 +44,7 @@ export function HowItWorks() {
           <span className="bg-gradient-to-r from-brand-gold to-brand-gold-light bg-clip-text text-transparent">Community Vibes</span>
         </h2>
 
-        <div className="relative mt-20 grid gap-10 sm:grid-cols-3 sm:gap-6">
+        <div className="relative mt-12 grid gap-8 sm:mt-20 sm:grid-cols-3 sm:gap-6">
           {/* Connecting line (desktop only) */}
           <div className="pointer-events-none absolute left-[calc(16.67%+24px)] right-[calc(16.67%+24px)] top-[44px] hidden sm:block">
             <div className="h-[2px] w-full bg-gradient-to-r from-brand-gold/30 via-brand-gold/15 to-brand-gold/30" />

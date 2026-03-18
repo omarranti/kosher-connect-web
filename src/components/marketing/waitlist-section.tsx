@@ -45,7 +45,7 @@ export function WaitlistSection() {
   }
 
   return (
-    <section id="waitlist" className="relative overflow-hidden bg-brand-navy px-6 py-24 sm:py-28">
+    <section id="waitlist" className="relative overflow-hidden bg-brand-navy px-4 py-16 sm:px-6 sm:py-28">
       {/* Background accents */}
       <div className="pointer-events-none absolute -left-32 top-0 h-[400px] w-[400px] rounded-full bg-brand-gold/5 blur-[120px]" />
       <div className="pointer-events-none absolute -right-20 bottom-0 h-[300px] w-[300px] rounded-full bg-brand-burgundy/5 blur-[100px]" />
@@ -55,7 +55,7 @@ export function WaitlistSection() {
           {/* Top gradient accent */}
           <div className="absolute left-0 right-0 top-0 h-1 bg-gradient-to-r from-brand-gold via-brand-burgundy to-brand-navy" />
 
-          <div className="p-8 sm:p-10">
+          <div className="p-5 sm:p-10">
             {!submitted ? (
               <>
                 <p className="section-eyebrow mb-2 text-left">Join the Movement</p>

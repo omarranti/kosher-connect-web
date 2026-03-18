@@ -57,12 +57,12 @@ const features: Feature[] = [
 
 export function FeaturesSection() {
   return (
-    <section id="features" className="relative bg-brand-parchment py-24 sm:py-32">
+    <section id="features" className="relative bg-brand-parchment py-16 sm:py-24 md:py-32">
       {/* Background accents */}
       <div className="pointer-events-none absolute left-0 top-0 h-[300px] w-[300px] -translate-x-1/2 rounded-full bg-brand-gold-pale/30 blur-[120px]" />
       <div className="pointer-events-none absolute bottom-0 right-0 h-[200px] w-[200px] translate-x-1/2 rounded-full bg-brand-burgundy/5 blur-[100px]" />
 
-      <div className="relative mx-auto max-w-6xl px-6">
+      <div className="relative mx-auto max-w-6xl px-5 sm:px-8">
         <div className="text-center">
           <p className="section-eyebrow mb-3">Everything You Need</p>
           <h2 className="section-title mb-4">
@@ -80,7 +80,7 @@ export function FeaturesSection() {
           {features.map((f, i) => (
             <div
               key={f.num}
-              className={`group relative overflow-hidden rounded-brand border border-brand-sand/60 bg-white p-8 shadow-card transition-all duration-300 hover:-translate-y-1 hover:shadow-card-hover ${
+              className={`group relative overflow-hidden rounded-brand border border-brand-sand/60 bg-white p-5 shadow-card transition-all duration-300 hover:-translate-y-1 hover:shadow-card-hover sm:p-8 ${
                 i === 0 ? 'sm:col-span-2 sm:flex sm:items-start sm:gap-10' : ''
               }`}
             >
