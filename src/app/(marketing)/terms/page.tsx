@@ -16,7 +16,7 @@ export default function TermsPage() {
           <section>
             <h2 className="font-display text-lg font-bold text-brand-navy">1. Acceptance of Terms</h2>
             <p>
-              By accessing or using the Kosher Connect application and website (collectively, the &ldquo;Service&rdquo;), you agree to be bound by these Terms of Use. If you do not agree to these terms, please do not use the Service. The Service is operated by Therma (&ldquo;we,&rdquo; &ldquo;us,&rdquo; or &ldquo;our&rdquo;), doing business as Kosher Connect.
+              By accessing or using the Kosher Connect application and website (collectively, the &ldquo;Service&rdquo;), you agree to be bound by these Terms of Use. If you do not agree to these terms, please do not use the Service. The Service is operated by Kosher Connect (&ldquo;we,&rdquo; &ldquo;us,&rdquo; or &ldquo;our&rdquo;).
             </p>
           </section>
 

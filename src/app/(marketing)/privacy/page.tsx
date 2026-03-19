@@ -16,7 +16,7 @@ export default function PrivacyPage() {
           <section>
             <h2 className="font-display text-lg font-bold text-brand-navy">1. Introduction</h2>
             <p>
-              Kosher Connect, operated by Therma (&ldquo;we,&rdquo; &ldquo;us,&rdquo; or &ldquo;our&rdquo;), respects your privacy and is committed to protecting your personal information. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website or use our mobile application (collectively, the &ldquo;Service&rdquo;).
+              Kosher Connect (&ldquo;we,&rdquo; &ldquo;us,&rdquo; or &ldquo;our&rdquo;) respects your privacy and is committed to protecting your personal information. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website or use our mobile application (collectively, the &ldquo;Service&rdquo;).
             </p>
           </section>
 
