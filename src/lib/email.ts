@@ -1,16 +1,12 @@
-import nodemailer from "nodemailer";
+import { Resend } from "resend";
 
-const transporter = nodemailer.createTransport({
-  host: process.env.SMTP_HOST || "smtp.office365.com",
-  port: Number(process.env.SMTP_PORT || 587),
-  secure: false,
-  auth: {
-    user: process.env.SMTP_USER,
-    pass: process.env.SMTP_PASSWORD,
-  },
-});
+let _resend: Resend | null = null;
+function getResend() {
+  if (!_resend) _resend = new Resend(process.env.RESEND_API_KEY!);
+  return _resend;
+}
 
-const FROM = `Kosher Connect <${process.env.SMTP_USER || "hello@kosherconnect.app"}>`;
+const FROM = "Kosher Connect <hello@kosherconnect.app>";
 
 function baseTemplate(content: string, footer: string) {
   return `<!DOCTYPE html>
@@ -58,13 +54,13 @@ export async function sendWaitlistWelcome(email: string) {
 </table>
 <p style="margin:0 0 24px;font-size:15px;line-height:1.6;color:#555;">We'll send you a TestFlight invite as soon as your spot opens up. Stay tuned.</p>
 ${cta("Visit Kosher Connect", "https://kosherconnect.app")}
-<p style="margin:24px 0 0;font-size:15px;line-height:1.6;color:#555;">Let's welcome Shabbat together. &#128367;&#65039;</p>`;
+<p style="margin:24px 0 0;font-size:15px;line-height:1.6;color:#555;">Let's welcome Shabbat together.</p>`;
 
-  await transporter.sendMail({
+  await getResend().emails.send({
     from: FROM,
     to: email,
-    subject: "Welcome to Kosher Connect! 🕎",
-    html: baseTemplate(content, "You're receiving this because you signed up at kosherconnect.app"),
+    subject: "Welcome to Kosher Connect!",
+    html: baseTemplate(content, "You signed up at kosherconnect.app"),
   });
 }
 
@@ -85,11 +81,11 @@ export async function sendVendorConfirmation(email: string, businessName: string
 ${cta("Visit Kosher Connect", "https://kosherconnect.app/work-with-us")}
 <p style="margin:24px 0 0;font-size:15px;line-height:1.6;color:#555;">Questions? Just reply to this email &mdash; we're here to help.</p>`;
 
-  await transporter.sendMail({
+  await getResend().emails.send({
     from: FROM,
     to: email,
-    subject: "Your Business Submission is In! 🍽",
-    html: baseTemplate(content, "You're receiving this because you submitted a business listing at kosherconnect.app"),
+    subject: "Your Business Submission is In!",
+    html: baseTemplate(content, "You submitted a business listing at kosherconnect.app"),
   });
 }
 
@@ -110,10 +106,10 @@ export async function sendModeratorConfirmation(email: string, name: string) {
 ${cta("Visit Kosher Connect", "https://kosherconnect.app")}
 <p style="margin:24px 0 0;font-size:15px;line-height:1.6;color:#555;">We appreciate you. This community is built by people like you.</p>`;
 
-  await transporter.sendMail({
+  await getResend().emails.send({
     from: FROM,
     to: email,
-    subject: "Moderator Application Received 🛡️",
-    html: baseTemplate(content, "You're receiving this because you applied to moderate at kosherconnect.app"),
+    subject: "Moderator Application Received",
+    html: baseTemplate(content, "You applied to moderate at kosherconnect.app"),
   });
 }
