@@ -132,7 +132,13 @@ npx vercel
 # Or connect GitHub repo to Vercel for auto-deploy
 ```
 
-Set environment variables in Vercel dashboard. Database can be Neon, Supabase, or Railway PostgreSQL.
+Set environment variables in Vercel dashboard. **Required for admin:** `DATABASE_URL` (Postgres). See **[docs/DATABASE_VERCEL.md](docs/DATABASE_VERCEL.md)** for Neon + `prisma db push` + seed steps.
+
+### “Failed to fetch one or more git submodules” (Vercel)
+
+That message means the Git repo has **submodules** listed (e.g. in `.gitmodules`) that Vercel’s clone step cannot fetch (private URL, wrong path, or removed repo). The build may still succeed if you don’t need those folders.
+
+**Fix:** On GitHub, remove unused submodules (`git submodule deinit -f --all`, delete `.gitmodules` and submodule dirs, commit), or fix each submodule URL and access (deploy keys / public repo).
 
 ## Related Repos
 

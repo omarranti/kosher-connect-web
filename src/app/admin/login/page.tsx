@@ -55,14 +55,13 @@ export default function AdminLoginPage() {
           </div>
           <div>
             <label htmlFor="password" className="block font-ui text-xs font-medium text-gray-600 mb-1">
-              Password
+              Password <span className="font-normal text-gray-400">(optional)</span>
             </label>
             <input
               id="password"
               name="password"
               type="password"
               autoComplete="current-password"
-              required
               className="w-full rounded-brand border border-gray-200 px-4 py-2.5 font-ui text-sm text-brand-navy focus:border-brand-gold focus:outline-none focus:ring-1 focus:ring-brand-gold"
             />
           </div>

@@ -6,8 +6,8 @@ export const metadata: Metadata = {
 
 export default function TermsPage() {
   return (
-    <section className="py-24 sm:py-32">
-      <div className="mx-auto max-w-3xl px-6">
+    <section className="py-20 sm:py-24 md:py-32">
+      <div className="mx-auto max-w-3xl px-5 sm:px-8">
         <p className="section-eyebrow mb-4">Legal</p>
         <h1 className="section-title mb-2">Terms of Use</h1>
         <p className="mb-10 font-ui text-sm text-brand-navy/40">Last updated: March 18, 2026</p>
@@ -87,8 +87,8 @@ export default function TermsPage() {
             <h2 className="font-display text-lg font-bold text-brand-navy">11. Contact</h2>
             <p>
               If you have questions about these Terms, please contact us at{" "}
-              <a href="mailto:hello@kosherconnect.com" className="text-brand-burgundy underline underline-offset-2 hover:text-brand-navy transition-colors">
-                hello@kosherconnect.com
+              <a href="mailto:hello@kosherconnect.app" className="text-brand-burgundy underline underline-offset-2 hover:text-brand-navy transition-colors">
+                hello@kosherconnect.app
               </a>.
             </p>
           </section>

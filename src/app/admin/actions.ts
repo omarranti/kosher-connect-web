@@ -3,9 +3,13 @@
 import { signIn, signOut } from "@/auth";
 import { redirect } from "next/navigation";
 import { isRedirectError } from "next/dist/client/components/redirect-error";
+import { clearAdminPinCookie } from "@/lib/admin-pin-gate";
+
+const SIGN_IN_ERROR = "Invalid credentials or insufficient permissions.";
 
 export async function signOutAction() {
-  await signOut({ redirectTo: "/admin/login" });
+  await clearAdminPinCookie();
+  await signOut({ redirectTo: "/" });
 }
 
 export async function signInAction(formData: FormData) {
@@ -13,16 +17,27 @@ export async function signInAction(formData: FormData) {
   const password = formData.get("password") as string;
   const callbackUrl = (formData.get("callbackUrl") as string) || "/admin";
   try {
-    await signIn("credentials", {
+    const result = await signIn("credentials", {
       email,
       password,
       redirect: false,
     });
+
+    // NextAuth v5 has inconsistent return values with redirect: false:
+    // - Can return { error, ok } object, or sometimes a URL string
+    // - auth() cannot be used here: session cookie is set in response, not readable in same request
+    const err =
+      (result && typeof result === "object" && result.error) ||
+      (result && typeof result === "object" && result.ok === false) ||
+      (typeof result === "string" && result.includes("/login"));
+
+    if (err) {
+      return { error: SIGN_IN_ERROR };
+    }
+
+    redirect(callbackUrl as "/admin");
   } catch (error) {
-    // Re-throw Next.js redirect errors (shouldn't happen with redirect: false)
     if (isRedirectError(error)) throw error;
-    // Any auth error (CredentialsSignin, etc.)
-    return { error: "Invalid email or password." };
+    return { error: SIGN_IN_ERROR };
   }
-  redirect(callbackUrl as "/admin");
 }
